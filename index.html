@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Recipe Rift</title>
+  <meta name="description" content="A daily League of Legends item puzzle: find the imposter, the missing component, and what they build into." />
+  <link rel="icon" href="assets/icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="orb" aria-hidden="true"></span>
+      <div>
+        <h1>Recipe Rift</h1>
+        <p class="sub" id="patch"></p>
+      </div>
+    </div>
+
+    <div class="seg" role="tablist" aria-label="Game mode">
+      <button role="tab" data-mode="daily" aria-selected="true">Daily</button>
+      <button role="tab" data-mode="endless" aria-selected="false">Endless</button>
+    </div>
+
+    <div class="actions">
+      <button class="icon-btn" id="btn-help" aria-label="How to play" title="How to play">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg>
+      </button>
+      <button class="icon-btn" id="btn-stats" aria-label="Statistics" title="Statistics">
+        <svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Puzzle board -->
+    <section class="card board" aria-label="Puzzle">
+      <div class="board-head">
+        <span class="label" id="puzzle-label">Puzzle</span>
+        <div class="pips" id="pips" aria-label="Attempts"></div>
+      </div>
+
+      <div class="recipe">
+        <div class="tiles" id="tiles"></div>
+        <div class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 48 24"><path d="M2 12h40M34 4l8 8-8 8"/></svg>
+        </div>
+        <div class="final" id="final"></div>
+      </div>
+
+      <ol class="objectives">
+        <li data-obj="imp"><span class="dot"></span>Spot the <b>imposter</b> component</li>
+        <li data-obj="miss"><span class="dot"></span>Name the <b>missing</b> component</li>
+        <li data-obj="item"><span class="dot"></span>Guess the <b>finished item</b></li>
+      </ol>
+    </section>
+
+    <!-- Oracle conversation -->
+    <section class="feed" id="feed" aria-live="polite" aria-label="Oracle"></section>
+  </main>
+
+  <!-- Composer -->
+  <footer class="composer-wrap">
+    <div class="composer card" id="composer">
+      <div class="suggest" id="suggest" role="listbox" hidden></div>
+      <div class="slots" id="slots">
+        <button class="slot" data-slot="imp"><span class="k">Imposter</span><span class="v">—</span></button>
+        <button class="slot" data-slot="miss"><span class="k">Missing</span><span class="v">—</span></button>
+        <button class="slot" data-slot="item"><span class="k">Builds into</span><span class="v">—</span></button>
+      </div>
+      <div class="input-row">
+        <input id="q" type="text" autocomplete="off" spellcheck="false" placeholder="Type an item…" aria-label="Search items" />
+        <button class="send" id="send" aria-label="Submit guess" disabled>
+          <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modals -->
+  <dialog id="dlg-help" class="modal">
+    <form method="dialog">
+      <h2>How to play</h2>
+      <p>The board shows the recipe of a finished item — but it has been tampered with.</p>
+      <ul class="rules">
+        <li><span class="badge bad">1</span>One shown component is an <b>imposter</b>: it is not in the recipe. Tap it.</li>
+        <li><span class="badge q">2</span>One real component is <b>missing</b> (the <b>?</b> tile). Name it.</li>
+        <li><span class="badge good">3</span>Name the <b>finished item</b> the real recipe builds into.</li>
+      </ul>
+      <p>You get <b>6 attempts</b>. Each attempt submits all three answers; correct answers lock in. The Oracle tells you whether the right answer costs more or less and which stats you share.</p>
+      <p class="muted">Daily: one puzzle per day, same for everyone. Endless: as many as you like, track your streak.</p>
+      <button class="btn primary" value="close">Got it</button>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-stats" class="modal">
+    <form method="dialog">
+      <h2>Statistics</h2>
+      <div class="stat-grid" id="stat-grid"></div>
+      <h3>Guess distribution</h3>
+      <div class="dist" id="dist"></div>
+      <button class="btn" value="close">Close</button>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

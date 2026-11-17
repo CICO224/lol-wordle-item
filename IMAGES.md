@@ -1,0 +1,171 @@
+# Images needed (patch 16.22.1)
+
+Put every image in `assets/items/` as a **PNG named exactly as below** (square, 64×64 or bigger).
+Any missing image falls back to a lettered placeholder, so the game works before you add them.
+
+## Components (56)
+
+- [ ] `aether-wisp.png` — Aether Wisp
+- [ ] `amplifying-tome.png` — Amplifying Tome
+- [ ] `b-f-sword.png` — B. F. Sword
+- [ ] `bamis-cinder.png` — Bami's Cinder
+- [ ] `bandleglass-mirror.png` — Bandleglass Mirror
+- [ ] `blasting-wand.png` — Blasting Wand
+- [ ] `blighting-jewel.png` — Blighting Jewel
+- [ ] `bramble-vest.png` — Bramble Vest
+- [ ] `catalyst-of-aeons.png` — Catalyst of Aeons
+- [ ] `caulfields-warhammer.png` — Caulfield's Warhammer
+- [ ] `chain-vest.png` — Chain Vest
+- [ ] `cloak-of-agility.png` — Cloak of Agility
+- [ ] `cloth-armor.png` — Cloth Armor
+- [ ] `crystalline-bracer.png` — Crystalline Bracer
+- [ ] `dagger.png` — Dagger
+- [ ] `executioners-calling.png` — Executioner's Calling
+- [ ] `fated-ashes.png` — Fated Ashes
+- [ ] `fiendish-codex.png` — Fiendish Codex
+- [ ] `forbidden-idol.png` — Forbidden Idol
+- [ ] `giants-belt.png` — Giant's Belt
+- [ ] `glacial-buckler.png` — Glacial Buckler
+- [ ] `haunting-guise.png` — Haunting Guise
+- [ ] `hearthbound-axe.png` — Hearthbound Axe
+- [ ] `hexdrinker.png` — Hexdrinker
+- [ ] `hextech-alternator.png` — Hextech Alternator
+- [ ] `kindlegem.png` — Kindlegem
+- [ ] `last-whisper.png` — Last Whisper
+- [ ] `long-sword.png` — Long Sword
+- [ ] `lost-chapter.png` — Lost Chapter
+- [ ] `needlessly-large-rod.png` — Needlessly Large Rod
+- [ ] `negatron-cloak.png` — Negatron Cloak
+- [ ] `noonquiver.png` — Noonquiver
+- [ ] `null-magic-mantle.png` — Null-Magic Mantle
+- [ ] `oblivion-orb.png` — Oblivion Orb
+- [ ] `phage.png` — Phage
+- [ ] `pickaxe.png` — Pickaxe
+- [ ] `quicksilver-sash.png` — Quicksilver Sash
+- [ ] `rectrix.png` — Rectrix
+- [ ] `recurve-bow.png` — Recurve Bow
+- [ ] `rejuvenation-bead.png` — Rejuvenation Bead
+- [ ] `ruby-crystal.png` — Ruby Crystal
+- [ ] `scouts-slingshot.png` — Scout's Slingshot
+- [ ] `seekers-armguard.png` — Seeker's Armguard
+- [ ] `serrated-dirk.png` — Serrated Dirk
+- [ ] `sheen.png` — Sheen
+- [ ] `spectres-cowl.png` — Spectre's Cowl
+- [ ] `steel-sigil.png` — Steel Sigil
+- [ ] `tear-of-the-goddess.png` — Tear of the Goddess
+- [ ] `the-brutalizer.png` — The Brutalizer
+- [ ] `tiamat.png` — Tiamat
+- [ ] `tunneler.png` — Tunneler
+- [ ] `vampiric-scepter.png` — Vampiric Scepter
+- [ ] `verdant-barrier.png` — Verdant Barrier
+- [ ] `wardens-mail.png` — Warden's Mail
+- [ ] `winged-moonplate.png` — Winged Moonplate
+- [ ] `zeal.png` — Zeal
+
+## Finished items (105)
+
+- [ ] `abyssal-mask.png` — Abyssal Mask
+- [ ] `actualizer.png` — Actualizer
+- [ ] `archangels-staff.png` — Archangel's Staff
+- [ ] `ardent-censer.png` — Ardent Censer
+- [ ] `axiom-arc.png` — Axiom Arc
+- [ ] `bandlepipes.png` — Bandlepipes
+- [ ] `banshees-veil.png` — Banshee's Veil
+- [ ] `bastionbreaker.png` — Bastionbreaker
+- [ ] `black-cleaver.png` — Black Cleaver
+- [ ] `blackfire-torch.png` — Blackfire Torch
+- [ ] `blade-of-the-ruined-king.png` — Blade of The Ruined King
+- [ ] `bloodletters-curse.png` — Bloodletter's Curse
+- [ ] `bloodthirster.png` — Bloodthirster
+- [ ] `chempunk-chainsword.png` — Chempunk Chainsword
+- [ ] `cosmic-drive.png` — Cosmic Drive
+- [ ] `cryptbloom.png` — Cryptbloom
+- [ ] `dawncore.png` — Dawncore
+- [ ] `dead-mans-plate.png` — Dead Man's Plate
+- [ ] `deaths-dance.png` — Death's Dance
+- [ ] `dusk-and-dawn.png` — Dusk and Dawn
+- [ ] `echoes-of-helia.png` — Echoes of Helia
+- [ ] `eclipse.png` — Eclipse
+- [ ] `edge-of-night.png` — Edge of Night
+- [ ] `endless-hunger.png` — Endless Hunger
+- [ ] `essence-reaver.png` — Essence Reaver
+- [ ] `experimental-hexplate.png` — Experimental Hexplate
+- [ ] `fiendhunter-bolts.png` — Fiendhunter Bolts
+- [ ] `force-of-nature.png` — Force of Nature
+- [ ] `frozen-heart.png` — Frozen Heart
+- [ ] `guardian-angel.png` — Guardian Angel
+- [ ] `guinsoos-rageblade.png` — Guinsoo's Rageblade
+- [ ] `heartsteel.png` — Heartsteel
+- [ ] `hexoptics-c44.png` — Hexoptics C44
+- [ ] `hextech-gunblade.png` — Hextech Gunblade
+- [ ] `hextech-rocketbelt.png` — Hextech Rocketbelt
+- [ ] `hollow-radiance.png` — Hollow Radiance
+- [ ] `horizon-focus.png` — Horizon Focus
+- [ ] `hubris.png` — Hubris
+- [ ] `hullbreaker.png` — Hullbreaker
+- [ ] `iceborn-gauntlet.png` — Iceborn Gauntlet
+- [ ] `immortal-shieldbow.png` — Immortal Shieldbow
+- [ ] `imperial-mandate.png` — Imperial Mandate
+- [ ] `infinity-edge.png` — Infinity Edge
+- [ ] `jaksho-the-protean.png` — Jak'Sho, The Protean
+- [ ] `kaenic-rookern.png` — Kaenic Rookern
+- [ ] `knights-vow.png` — Knight's Vow
+- [ ] `kraken-slayer.png` — Kraken Slayer
+- [ ] `liandrys-torment.png` — Liandry's Torment
+- [ ] `lich-bane.png` — Lich Bane
+- [ ] `locket-of-the-iron-solari.png` — Locket of the Iron Solari
+- [ ] `lord-dominiks-regards.png` — Lord Dominik's Regards
+- [ ] `ludens-echo.png` — Luden's Echo
+- [ ] `malignance.png` — Malignance
+- [ ] `manamune.png` — Manamune
+- [ ] `maw-of-malmortius.png` — Maw of Malmortius
+- [ ] `mercurial-scimitar.png` — Mercurial Scimitar
+- [ ] `mikaels-blessing.png` — Mikael's Blessing
+- [ ] `moonstone-renewer.png` — Moonstone Renewer
+- [ ] `morellonomicon.png` — Morellonomicon
+- [ ] `mortal-reminder.png` — Mortal Reminder
+- [ ] `nashors-tooth.png` — Nashor's Tooth
+- [ ] `navori-flickerblade.png` — Navori Flickerblade
+- [ ] `overlords-bloodmail.png` — Overlord's Bloodmail
+- [ ] `phantom-dancer.png` — Phantom Dancer
+- [ ] `profane-hydra.png` — Profane Hydra
+- [ ] `protoplasm-harness.png` — Protoplasm Harness
+- [ ] `rabadons-deathcap.png` — Rabadon's Deathcap
+- [ ] `randuins-omen.png` — Randuin's Omen
+- [ ] `rapid-firecannon.png` — Rapid Firecannon
+- [ ] `ravenous-hydra.png` — Ravenous Hydra
+- [ ] `redemption.png` — Redemption
+- [ ] `riftmaker.png` — Riftmaker
+- [ ] `rod-of-ages.png` — Rod of Ages
+- [ ] `runaans-hurricane.png` — Runaan's Hurricane
+- [ ] `rylais-crystal-scepter.png` — Rylai's Crystal Scepter
+- [ ] `serpents-fang.png` — Serpent's Fang
+- [ ] `seryldas-grudge.png` — Serylda's Grudge
+- [ ] `shadowflame.png` — Shadowflame
+- [ ] `shurelyas-battlesong.png` — Shurelya's Battlesong
+- [ ] `spear-of-shojin.png` — Spear of Shojin
+- [ ] `spirit-visage.png` — Spirit Visage
+- [ ] `staff-of-flowing-water.png` — Staff of Flowing Water
+- [ ] `statikk-shiv.png` — Statikk Shiv
+- [ ] `steraks-gage.png` — Sterak's Gage
+- [ ] `stormrazor.png` — Stormrazor
+- [ ] `stormsurge.png` — Stormsurge
+- [ ] `stridebreaker.png` — Stridebreaker
+- [ ] `sundered-sky.png` — Sundered Sky
+- [ ] `sunfire-aegis.png` — Sunfire Aegis
+- [ ] `terminus.png` — Terminus
+- [ ] `the-collector.png` — The Collector
+- [ ] `thornmail.png` — Thornmail
+- [ ] `titanic-hydra.png` — Titanic Hydra
+- [ ] `trinity-force.png` — Trinity Force
+- [ ] `umbral-glaive.png` — Umbral Glaive
+- [ ] `unending-despair.png` — Unending Despair
+- [ ] `void-staff.png` — Void Staff
+- [ ] `voltaic-cyclosword.png` — Voltaic Cyclosword
+- [ ] `warmogs-armor.png` — Warmog's Armor
+- [ ] `winters-approach.png` — Winter's Approach
+- [ ] `wits-end.png` — Wit's End
+- [ ] `youmuus-ghostblade.png` — Youmuu's Ghostblade
+- [ ] `yun-tal-wildarrows.png` — Yun Tal Wildarrows
+- [ ] `zekes-convergence.png` — Zeke's Convergence
+- [ ] `zhonyas-hourglass.png` — Zhonya's Hourglass
