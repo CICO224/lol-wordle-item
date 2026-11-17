@@ -2,14 +2,13 @@
 
 # Recipe Rift
 
-A daily League of Legends item puzzle. Each round shows a finished item's recipe that has been tampered with:
+An endless League of Legends item puzzle with two modes:
 
-1. **Imposter** – one shown component doesn't belong. Tap it.
-2. **Missing** – one real component is hidden behind the `?` tile. Name it.
-3. **Builds into** – name the finished item.
+- **Imposter** – the full recipe is shown plus one component that doesn't belong. Tap the imposter, then name the finished item.
+- **Missing** – one real component is hidden behind the `?` tile. Name it, then name the finished item.
 
-You get 6 attempts. Correct answers lock in, and the Oracle hints at cost (higher/lower), shared stats and shared components.
-There are two modes: **Daily** (same puzzle for everyone each day) and **Endless**. Stats and streaks are saved in the browser.
+You get 6 attempts per puzzle. Correct answers lock in, every item shows its gold price, and the Oracle hints at cost (higher/lower), shared stats and shared components.
+Each mode keeps its own stats in the browser: played, win rate, current and best streak, average guesses and guess distribution. Giving up counts as a loss.
 
 ## Run
 

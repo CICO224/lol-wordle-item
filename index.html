@@ -24,8 +24,8 @@
     </div>
 
     <div class="seg" role="tablist" aria-label="Game mode">
-      <button role="tab" data-mode="daily" aria-selected="true">Daily</button>
-      <button role="tab" data-mode="endless" aria-selected="false">Endless</button>
+      <button role="tab" data-mode="imposter" aria-selected="true">Imposter</button>
+      <button role="tab" data-mode="missing" aria-selected="false">Missing</button>
     </div>
 
     <div class="actions">
@@ -45,6 +45,10 @@
         <span class="label" id="puzzle-label">Puzzle</span>
         <div class="pips" id="pips" aria-label="Attempts"></div>
       </div>
+      <div class="board-sub">
+        <div class="mini-stats" id="mini-stats"></div>
+        <button class="link-btn" id="btn-giveup" type="button">Give up</button>
+      </div>
 
       <div class="recipe">
         <div class="tiles" id="tiles"></div>
@@ -54,11 +58,7 @@
         <div class="final" id="final"></div>
       </div>
 
-      <ol class="objectives">
-        <li data-obj="imp"><span class="dot"></span>Spot the <b>imposter</b> component</li>
-        <li data-obj="miss"><span class="dot"></span>Name the <b>missing</b> component</li>
-        <li data-obj="item"><span class="dot"></span>Guess the <b>finished item</b></li>
-      </ol>
+      <ol class="objectives" id="objectives"></ol>
     </section>
 
     <!-- Oracle conversation -->
@@ -87,14 +87,14 @@
   <dialog id="dlg-help" class="modal">
     <form method="dialog">
       <h2>How to play</h2>
-      <p>The board shows the recipe of a finished item — but it has been tampered with.</p>
+      <p>The board shows the recipe of a finished item, but it has been tampered with. There are two endless modes:</p>
       <ul class="rules">
-        <li><span class="badge bad">1</span>One shown component is an <b>imposter</b>: it is not in the recipe. Tap it.</li>
-        <li><span class="badge q">2</span>One real component is <b>missing</b> (the <b>?</b> tile). Name it.</li>
-        <li><span class="badge good">3</span>Name the <b>finished item</b> the real recipe builds into.</li>
+        <li><span class="badge bad">I</span><span><b>Imposter</b>: every real component is shown, plus one that doesn't belong. Tap the imposter.</span></li>
+        <li><span class="badge q">M</span><span><b>Missing</b>: one real component is hidden behind the <b>?</b> tile. Name it.</span></li>
+        <li><span class="badge good">+</span><span>In both modes, also name the <b>finished item</b> the real recipe builds into.</span></li>
       </ul>
-      <p>You get <b>6 attempts</b>. Each attempt submits all three answers; correct answers lock in. The Oracle tells you whether the right answer costs more or less and which stats you share.</p>
-      <p class="muted">Daily: one puzzle per day, same for everyone. Endless: as many as you like, track your streak.</p>
+      <p>You get <b>6 attempts</b>. Correct answers lock in. Every item shows its gold price, and the Oracle tells you whether the answer costs more or less than your guess.</p>
+      <p class="muted">Each mode keeps its own stats and streak. Giving up counts as a loss.</p>
       <button class="btn primary" value="close">Got it</button>
     </form>
   </dialog>
@@ -102,10 +102,15 @@
   <dialog id="dlg-stats" class="modal">
     <form method="dialog">
       <h2>Statistics</h2>
+      <div class="seg stats-seg" id="stats-seg" role="tablist" aria-label="Stats for mode">
+        <button type="button" role="tab" data-mode="imposter">Imposter</button>
+        <button type="button" role="tab" data-mode="missing">Missing</button>
+      </div>
       <div class="stat-grid" id="stat-grid"></div>
       <h3>Guess distribution</h3>
       <div class="dist" id="dist"></div>
       <button class="btn" value="close">Close</button>
+      <button class="link-btn danger" id="btn-reset" type="button">Reset stats for this mode</button>
     </form>
   </dialog>
 
