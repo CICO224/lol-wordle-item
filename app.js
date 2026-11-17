@@ -334,9 +334,16 @@
     majors.forEach((n) => (n.style.minHeight = ""));
     const tallest = Math.max(0, ...majors.map((n) => n.offsetHeight));
     majors.forEach((n) => (n.style.minHeight = `${tallest}px`));
+    // Every major column gets the widest column's width, so siblings are evenly spaced —
+    // unless that would make the tree too wide to fit even at the smallest zoom (phones).
+    const MIN_SCALE = 0.55;
+    const columns = [...document.querySelectorAll("#tiles > .branch")];
+    columns.forEach((c) => (c.style.width = ""));
+    const widest = Math.max(0, ...columns.map((c) => c.getBoundingClientRect().width));
+    if (widest * columns.length * MIN_SCALE <= wrap.clientWidth) columns.forEach((c) => (c.style.width = `${Math.ceil(widest)}px`));
     const need = Math.max($("#tiles").offsetWidth, $(".tree-top", tree).scrollWidth), have = wrap.clientWidth;
     if (need > have && have > 0) {
-      const k = Math.max(0.55, have / need);
+      const k = Math.max(MIN_SCALE, have / need);
       tree.style.transform = `scale(${k})`;
       const pad = parseFloat(getComputedStyle(wrap).paddingTop) + parseFloat(getComputedStyle(wrap).paddingBottom);
       wrap.style.height = `${Math.ceil(tree.offsetHeight * k + pad)}px`;
