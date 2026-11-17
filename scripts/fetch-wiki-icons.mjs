@@ -17,8 +17,8 @@ mkdirSync(outDir, { recursive: true });
 // Load the game's item list from data.js.
 const ctx = { window: {} };
 vm.runInNewContext(readFileSync(new URL("data.js", root), "utf8"), ctx);
-const { components, items } = ctx.window.GAME_DATA;
-const wanted = [...components, ...items];
+const { components, parts = [], items } = ctx.window.GAME_DATA;
+const wanted = [...components, ...parts, ...items];
 
 const norm = (s) => s.toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, " ").trim();
 const api = async (params) => {

@@ -62,6 +62,12 @@ Any missing image falls back to a lettered placeholder, so the game works before
 - [ ] `winged-moonplate.png` — Winged Moonplate
 - [ ] `zeal.png` — Zeal
 
+## Base parts (3)
+
+- [ ] `faerie-charm.png` — Faerie Charm
+- [ ] `glowing-mote.png` — Glowing Mote
+- [ ] `sapphire-crystal.png` — Sapphire Crystal
+
 ## Finished items (105)
 
 - [ ] `abyssal-mask.png` — Abyssal Mask

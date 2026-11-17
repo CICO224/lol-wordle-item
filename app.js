@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const { version, components, items } = window.GAME_DATA;
+  const { version, components, parts = [], items } = window.GAME_DATA;
   const MAX_TRIES = 6;
   const IMG_DIR = "assets/items/";
 
@@ -33,7 +33,8 @@
   };
   const SHARE_ICON = { imp: "🕵️", miss: "🧩", item: "⚔️" };
 
-  const byId = new Map([...components, ...items].map((x) => [x.id, x]));
+  // Base parts only appear as leaves in the tree; they are never answers.
+  const byId = new Map([...components, ...parts, ...items].map((x) => [x.id, x]));
   const gold = (n) => `${n.toLocaleString("en-US")}g`;
 
   // ---------- helpers ----------
@@ -298,21 +299,47 @@
     $("#btn-giveup").hidden = game.done;
   }
 
+  // Wide trees (up to ~10 base components) are scaled down to fit narrow screens.
+  function fitTree() {
+    const wrap = $("#tree-wrap"), tree = $("#tree");
+    tree.style.transform = "";
+    wrap.style.height = "";
+    const need = Math.max($("#tiles").offsetWidth, $(".tree-top", tree).scrollWidth), have = wrap.clientWidth;
+    if (need > have && have > 0) {
+      const k = Math.max(0.55, have / need);
+      tree.style.transform = `scale(${k})`;
+      const pad = parseFloat(getComputedStyle(wrap).paddingTop) + parseFloat(getComputedStyle(wrap).paddingBottom);
+      wrap.style.height = `${Math.ceil(tree.offsetHeight * k + pad)}px`;
+    }
+  }
+  let fitRaf = 0;
+  window.addEventListener("resize", () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitTree); });
+
+  let revealedMissing = null; // seed of the puzzle whose missing piece was already animated in
   function renderBoard() {
     tilesEl.replaceChildren();
-    const branch = (el, state = "") => tilesEl.append(h("li", { class: `branch ${state}` }, el));
+    // Base components: a smaller second row under each major component.
+    const leaf = (x) => h("li", { class: "branch leaf" },
+      h("div", { class: "node small", title: `${x.name} · ${gold(x.cost)}${x.stats.length ? ` · ${x.stats.join(", ")}` : ""}` },
+        h("span", { class: "tile" }, icon(x)),
+        h("span", { class: "cap" }, h("span", { class: "nm" }, x.name), h("span", { class: "g" }, gold(x.cost)),
+          x.stats.length ? h("span", { class: "st1" }, x.stats.map(shortStat).join(" · ")) : null)));
+    const subtree = (x) => (x && x.from?.length ? h("ul", { class: "branches sub" }, x.from.map((id) => leaf(byId.get(id)))) : null);
+    const branch = (el, state = "", x = null) => tilesEl.append(h("li", { class: `branch major ${state}` }, el, subtree(x)));
     puzzle.board.forEach((t, i) => {
       if (t.kind === "missing") {
         const found = game.solved.miss || (game.done && puzzle.missing);
         const c = found && byId.get(found);
         branch(found
           ? node("div", { "aria-label": `Missing component: ${c.name}` }, "missing found", icon(c), caption(c.name, gold(c.cost), c))
-          : node("div", { "aria-label": "Missing component" }, "missing", "?", caption("Missing", "?g")), found ? "ok" : "pending");
+          : node("div", { "aria-label": "Missing component" }, "missing", "?", caption("Missing", "?g")),
+          found ? (revealedMissing === puzzle.seed ? "ok" : "ok found-now") : "pending", c || null);
+        if (found) revealedMissing = puzzle.seed;
         return;
       }
       const c = byId.get(t.id);
       if (mode !== "imposter") {
-        branch(node("div", {}, "", icon(c), caption(c.name, gold(c.cost), c)));
+        branch(node("div", {}, "", icon(c), caption(c.name, gold(c.cost), c)), "", c);
         return;
       }
       const caught = game.solved.imp === i || (game.done && t.kind === "imposter");
@@ -323,7 +350,7 @@
         disabled: game.done || game.solved.imp != null || verified,
         onclick: () => { sel.imp = sel.imp === i ? null : i; sel.imp != null ? sfx.select() : sfx.click(); renderBoard(); renderSlots(); if (sel.imp != null) focusNext(); },
       }, `${sel.imp === i && !caught ? "selected" : ""} ${caught ? "caught" : ""} ${verified ? "verified" : ""}`, icon(c), caption(c.name, gold(c.cost), c));
-      branch(el, caught ? "cut" : verified ? "ok" : "");
+      branch(el, caught ? "cut" : verified ? "ok" : "", c);
     });
 
     finalEl.replaceChildren();
@@ -350,6 +377,7 @@
         h("span", { class: "hint-prog" }, Array.from({ length: HINT_AT }, (_, i) => h("i", { class: i < n ? "on" : "" }))));
     }
     $("#tree").classList.toggle("solved", !!found);
+    fitTree();
 
     document.querySelectorAll("#objectives li").forEach((li) => li.classList.toggle("done", game.solved[li.dataset.obj] != null));
   }

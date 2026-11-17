@@ -498,3 +498,42 @@ button.node:hover:not(:disabled) .tile { transform: translateY(-3px); border-col
   .hint-msg { font-size: 10px; }
   .hint-prog i { width: 12px; }
 }
+
+/* ---- v6: three-level tree (item → major components → base components) ---- */
+.tree-wrap { width: 100%; overflow: hidden; padding: 4px 0; }
+.tree { transform-origin: top center; }
+
+.branch { flex-direction: column; align-items: center; }
+.branch > .branches.sub { --stem: 16px; margin-top: 12px; }
+.branch > .branches.sub::before { top: -12px; height: 12px; border-left-color: var(--b); }
+.branch.leaf { --b: var(--line); padding: var(--stem) 3px 0; }
+.branch.major { padding-left: 8px; padding-right: 8px; }
+
+/* base component node: small icon, compact caption */
+.node.small { --cap: 66px; gap: 4px; }
+.node.small .tile { --tile: 40px; border-radius: 10px; }
+.node.small .tile img, .node.small .tile .ph { border-radius: 9px; }
+.node.small .tile .ph { font-size: 12px; }
+.node.small .cap .nm { font-size: 10px; font-weight: 500; color: #b9b9c8; }
+.node.small .cap .g { font-size: 10px; }
+.st1 { font-size: 9.5px; color: var(--muted); line-height: 1.2; }
+
+/* dim the recipe of a caught imposter */
+.branch.cut > .branches.sub { opacity: .35; filter: grayscale(.7); }
+/* a just-found missing component's recipe grows in */
+.branch.found-now > .branches.sub { animation: rise .4s ease both; }
+
+@media (max-width: 600px) {
+  .branch.major { padding-left: 3px; padding-right: 3px; }
+  .branch.leaf { padding-left: 1px; padding-right: 1px; }
+  .node.small { --cap: 52px; }
+  .node.small .tile { --tile: 34px; }
+  .node.small .cap .nm { font-size: 9px; }
+  .st1 { font-size: 8.5px; }
+}
+
+/* keep every level on one row; the whole tree is scaled down on narrow screens instead */
+.tree .branches { flex-wrap: nowrap; width: max-content; }
+.tree .branch { flex: none; }
+/* a single child hangs straight down from its parent */
+.branch:only-child::before { border-top: 0; border-radius: 0; }

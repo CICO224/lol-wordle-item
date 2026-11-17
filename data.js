@@ -14,6 +14,9 @@ window.GAME_DATA = {
    "stats": [
     "30 Ability Power",
     "4% Move Speed"
+   ],
+   "from": [
+    "1052"
    ]
   },
   {
@@ -26,7 +29,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "20 Ability Power"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "1038",
@@ -38,7 +42,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "40 Attack Damage"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "6660",
@@ -52,6 +57,10 @@ window.GAME_DATA = {
    "stats": [
     "150 Health",
     "5 Ability Haste"
+   ],
+   "from": [
+    "1028",
+    "2022"
    ]
   },
   {
@@ -69,6 +78,11 @@ window.GAME_DATA = {
     "20 Ability Power",
     "100% Base Mana Regen",
     "10 Ability Haste"
+   ],
+   "from": [
+    "1004",
+    "1052",
+    "2022"
    ]
   },
   {
@@ -81,7 +95,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "45 Ability Power"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "4630",
@@ -95,6 +110,9 @@ window.GAME_DATA = {
    "stats": [
     "25 Ability Power",
     "13% Magic Penetration"
+   ],
+   "from": [
+    "1052"
    ]
   },
   {
@@ -107,6 +125,10 @@ window.GAME_DATA = {
    ],
    "stats": [
     "30 Armor"
+   ],
+   "from": [
+    "1029",
+    "1029"
    ]
   },
   {
@@ -123,6 +145,11 @@ window.GAME_DATA = {
    "stats": [
     "300 Health",
     "375 Mana"
+   ],
+   "from": [
+    "1028",
+    "1028",
+    "1027"
    ]
   },
   {
@@ -138,6 +165,11 @@ window.GAME_DATA = {
    "stats": [
     "20 Attack Damage",
     "10 Ability Haste"
+   ],
+   "from": [
+    "1036",
+    "2022",
+    "1036"
    ]
   },
   {
@@ -150,6 +182,9 @@ window.GAME_DATA = {
    ],
    "stats": [
     "40 Armor"
+   ],
+   "from": [
+    "1029"
    ]
   },
   {
@@ -162,7 +197,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "15% Critical Strike Chance"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "1029",
@@ -174,7 +210,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "15 Armor"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "3801",
@@ -188,6 +225,10 @@ window.GAME_DATA = {
    "stats": [
     "200 Health",
     "100% Base Health Regen"
+   ],
+   "from": [
+    "1028",
+    "1006"
    ]
   },
   {
@@ -200,7 +241,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "10% Attack Speed"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "3123",
@@ -212,6 +254,9 @@ window.GAME_DATA = {
    ],
    "stats": [
     "15 Attack Damage"
+   ],
+   "from": [
+    "1036"
    ]
   },
   {
@@ -224,6 +269,9 @@ window.GAME_DATA = {
    ],
    "stats": [
     "30 Ability Power"
+   ],
+   "from": [
+    "1052"
    ]
   },
   {
@@ -239,6 +287,10 @@ window.GAME_DATA = {
    "stats": [
     "25 Ability Power",
     "10 Ability Haste"
+   ],
+   "from": [
+    "1052",
+    "2022"
    ]
   },
   {
@@ -252,6 +304,9 @@ window.GAME_DATA = {
    "stats": [
     "50% Base Mana Regen",
     "8% Heal and Shield Power"
+   ],
+   "from": [
+    "1004"
    ]
   },
   {
@@ -264,6 +319,9 @@ window.GAME_DATA = {
    ],
    "stats": [
     "350 Health"
+   ],
+   "from": [
+    "1028"
    ]
   },
   {
@@ -281,6 +339,11 @@ window.GAME_DATA = {
     "25 Armor",
     "300 Mana",
     "10 Ability Haste"
+   ],
+   "from": [
+    "1029",
+    "1027",
+    "2022"
    ]
   },
   {
@@ -295,6 +358,10 @@ window.GAME_DATA = {
    "stats": [
     "30 Ability Power",
     "200 Health"
+   ],
+   "from": [
+    "1052",
+    "1028"
    ]
   },
   {
@@ -309,6 +376,11 @@ window.GAME_DATA = {
    "stats": [
     "20 Attack Damage",
     "20% Attack Speed"
+   ],
+   "from": [
+    "1036",
+    "1042",
+    "1036"
    ]
   },
   {
@@ -323,6 +395,11 @@ window.GAME_DATA = {
    "stats": [
     "25 Attack Damage",
     "25 Magic Resist"
+   ],
+   "from": [
+    "1036",
+    "1033",
+    "1036"
    ]
   },
   {
@@ -335,6 +412,10 @@ window.GAME_DATA = {
    ],
    "stats": [
     "45 Ability Power"
+   ],
+   "from": [
+    "1052",
+    "1052"
    ]
   },
   {
@@ -350,6 +431,10 @@ window.GAME_DATA = {
    "stats": [
     "200 Health",
     "10 Ability Haste"
+   ],
+   "from": [
+    "1028",
+    "2022"
    ]
   },
   {
@@ -364,6 +449,10 @@ window.GAME_DATA = {
    "stats": [
     "20 Attack Damage",
     "18% Armor Penetration"
+   ],
+   "from": [
+    "1036",
+    "1036"
    ]
   },
   {
@@ -377,7 +466,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "10 Attack Damage"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "3802",
@@ -395,6 +485,11 @@ window.GAME_DATA = {
     "40 Ability Power",
     "300 Mana",
     "10 Ability Haste"
+   ],
+   "from": [
+    "1052",
+    "1027",
+    "2022"
    ]
   },
   {
@@ -407,7 +502,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "65 Ability Power"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "1057",
@@ -419,6 +515,9 @@ window.GAME_DATA = {
    ],
    "stats": [
     "45 Magic Resist"
+   ],
+   "from": [
+    "1033"
    ]
   },
   {
@@ -433,6 +532,10 @@ window.GAME_DATA = {
    "stats": [
     "15 Attack Damage",
     "20% Critical Strike Chance"
+   ],
+   "from": [
+    "1036",
+    "1018"
    ]
   },
   {
@@ -445,7 +548,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "20 Magic Resist"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "3916",
@@ -457,6 +561,9 @@ window.GAME_DATA = {
    ],
    "stats": [
     "25 Ability Power"
+   ],
+   "from": [
+    "1052"
    ]
   },
   {
@@ -472,6 +579,10 @@ window.GAME_DATA = {
    "stats": [
     "15 Attack Damage",
     "200 Health"
+   ],
+   "from": [
+    "1028",
+    "1036"
    ]
   },
   {
@@ -484,7 +595,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "25 Attack Damage"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "3140",
@@ -497,6 +609,9 @@ window.GAME_DATA = {
    ],
    "stats": [
     "30 Magic Resist"
+   ],
+   "from": [
+    "1033"
    ]
   },
   {
@@ -511,6 +626,9 @@ window.GAME_DATA = {
    "stats": [
     "15 Attack Damage",
     "4% Move Speed"
+   ],
+   "from": [
+    "1036"
    ]
   },
   {
@@ -524,6 +642,9 @@ window.GAME_DATA = {
    ],
    "stats": [
     "15% Attack Speed"
+   ],
+   "from": [
+    "1042"
    ]
   },
   {
@@ -536,7 +657,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "100% Base Health Regen"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "1028",
@@ -548,7 +670,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "150 Health"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "3144",
@@ -560,6 +683,10 @@ window.GAME_DATA = {
    ],
    "stats": [
     "20% Attack Speed"
+   ],
+   "from": [
+    "1042",
+    "1042"
    ]
   },
   {
@@ -575,6 +702,11 @@ window.GAME_DATA = {
    "stats": [
     "40 Ability Power",
     "25 Armor"
+   ],
+   "from": [
+    "1052",
+    "1029",
+    "1052"
    ]
   },
   {
@@ -589,6 +721,10 @@ window.GAME_DATA = {
    "stats": [
     "20 Attack Damage",
     "10 Lethality"
+   ],
+   "from": [
+    "1036",
+    "1036"
    ]
   },
   {
@@ -602,6 +738,9 @@ window.GAME_DATA = {
    ],
    "stats": [
     "10 Ability Haste"
+   ],
+   "from": [
+    "2022"
    ]
   },
   {
@@ -618,6 +757,11 @@ window.GAME_DATA = {
     "200 Health",
     "35 Magic Resist",
     "100% Base Health Regen"
+   ],
+   "from": [
+    "1028",
+    "1033",
+    "1006"
    ]
   },
   {
@@ -632,6 +776,11 @@ window.GAME_DATA = {
    "stats": [
     "15 Attack Damage",
     "30 Armor"
+   ],
+   "from": [
+    "1029",
+    "1036",
+    "1029"
    ]
   },
   {
@@ -645,7 +794,8 @@ window.GAME_DATA = {
    ],
    "stats": [
     "240 Mana"
-   ]
+   ],
+   "from": []
   },
   {
    "id": "2020",
@@ -661,6 +811,10 @@ window.GAME_DATA = {
     "25 Attack Damage",
     "10 Ability Haste",
     "5 Lethality"
+   ],
+   "from": [
+    "2022",
+    "1037"
    ]
   },
   {
@@ -674,6 +828,10 @@ window.GAME_DATA = {
    ],
    "stats": [
     "25 Attack Damage"
+   ],
+   "from": [
+    "1036",
+    "1036"
    ]
   },
   {
@@ -688,6 +846,10 @@ window.GAME_DATA = {
    "stats": [
     "15 Attack Damage",
     "250 Health"
+   ],
+   "from": [
+    "1036",
+    "1028"
    ]
   },
   {
@@ -702,6 +864,9 @@ window.GAME_DATA = {
    "stats": [
     "15 Attack Damage",
     "7% Life Steal"
+   ],
+   "from": [
+    "1036"
    ]
   },
   {
@@ -716,6 +881,11 @@ window.GAME_DATA = {
    "stats": [
     "40 Ability Power",
     "25 Magic Resist"
+   ],
+   "from": [
+    "1052",
+    "1033",
+    "1052"
    ]
   },
   {
@@ -728,6 +898,10 @@ window.GAME_DATA = {
    ],
    "stats": [
     "40 Armor"
+   ],
+   "from": [
+    "1029",
+    "1029"
    ]
   },
   {
@@ -742,6 +916,9 @@ window.GAME_DATA = {
    "stats": [
     "200 Health",
     "4% Move Speed"
+   ],
+   "from": [
+    "1028"
    ]
   },
   {
@@ -758,7 +935,52 @@ window.GAME_DATA = {
     "15% Attack Speed",
     "15% Critical Strike Chance",
     "4% Move Speed"
+   ],
+   "from": [
+    "1018",
+    "1042"
    ]
+  }
+ ],
+ "parts": [
+  {
+   "id": "1004",
+   "name": "Faerie Charm",
+   "slug": "faerie-charm",
+   "cost": 200,
+   "tags": [
+    "ManaRegen"
+   ],
+   "stats": [
+    "50% Base Mana Regen"
+   ],
+   "from": []
+  },
+  {
+   "id": "2022",
+   "name": "Glowing Mote",
+   "slug": "glowing-mote",
+   "cost": 250,
+   "tags": [
+    "CooldownReduction"
+   ],
+   "stats": [
+    "5 Ability Haste"
+   ],
+   "from": []
+  },
+  {
+   "id": "1027",
+   "name": "Sapphire Crystal",
+   "slug": "sapphire-crystal",
+   "cost": 300,
+   "tags": [
+    "Mana"
+   ],
+   "stats": [
+    "300 Mana"
+   ],
+   "from": []
   }
  ],
  "items": [
