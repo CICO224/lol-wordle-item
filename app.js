@@ -864,6 +864,33 @@
   renderMute();
   document.querySelectorAll("dialog").forEach((d) => d.addEventListener("click", (e) => { if (e.target === d) d.close(); }));
 
+  // ---------- fake ads: ✕ doesn't close the ad, it plays the next one ----------
+  const GOAT_AD = { art: "🐐", text: "manson is a goat adc", cta: "Watch now", theme: "goat" };
+  document.querySelectorAll(".ad-frame").forEach((frame) => {
+    const link = $(".ad-creative", frame);
+    const first = { art: $(".ad-art", link).textContent, text: $(".ad-text", link).textContent, cta: $(".ad-cta", link).textContent, theme: link.classList.contains("alt") ? "alt" : "" };
+    const playlist = [first, GOAT_AD];
+    let at = 0, swapping = false;
+    $(".ad-close", frame).addEventListener("click", async () => {
+      if (swapping) return;
+      swapping = true;
+      sfx.select();
+      link.classList.add("swap-out");
+      await wait(220);
+      at = (at + 1) % playlist.length;
+      const ad = playlist[at];
+      $(".ad-art", link).textContent = ad.art;
+      $(".ad-text", link).textContent = ad.text;
+      $(".ad-cta", link).textContent = ad.cta;
+      link.classList.remove("alt", "goat", "swap-out");
+      if (ad.theme) link.classList.add(ad.theme);
+      link.classList.add("swap-in");
+      await wait(320);
+      link.classList.remove("swap-in");
+      swapping = false;
+    });
+  });
+
   loadGame();
   if (!store.get("rr:seenHelp", false)) { store.set("rr:seenHelp", true); $("#dlg-help").showModal(); }
 })();

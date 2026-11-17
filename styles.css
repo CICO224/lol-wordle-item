@@ -680,3 +680,33 @@ a.ad-creative:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(
 a.ad-creative:hover .ad-cta { transform: scale(1.06); }
 .ad-cta { transition: transform .2s; }
 a.ad-creative:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+/* ---- v13: ad close button plays the next ad ---- */
+.ad-frame { position: relative; }
+.ad-x { display: none; } /* replaced by .ad-info + .ad-close */
+.ad-info, .ad-close {
+  position: absolute; top: 5px; z-index: 2;
+  width: 18px; height: 18px; display: grid; place-items: center;
+  font-size: 11px; line-height: 1; color: #fff;
+}
+.ad-info { right: 26px; opacity: .8; pointer-events: none; }
+.ad-close {
+  right: 6px; padding: 0; border: 0; border-radius: 4px;
+  background: rgba(0, 0, 0, 0.25); cursor: pointer; transition: background .15s, transform .15s;
+}
+.ad-close:hover { background: rgba(0, 0, 0, 0.5); transform: scale(1.1); }
+.ad-close:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+
+/* the goat ad */
+.ad-creative.goat {
+  background:
+    radial-gradient(130px 130px at 50% 30%, rgba(255, 255, 255, 0.35), transparent 70%),
+    linear-gradient(170deg, #f7d046 0%, #f59e0b 45%, #b45309 100%);
+}
+.ad-creative.goat .ad-cta { background: #1a1a1a; color: #f7d046; }
+
+/* swap animation */
+.ad-creative.swap-out { animation: ad-out .22s ease-in forwards; }
+.ad-creative.swap-in { animation: ad-in .32s cubic-bezier(.2, 1.4, .4, 1); }
+@keyframes ad-out { to { opacity: 0; transform: scale(.94) rotateY(70deg); } }
+@keyframes ad-in { from { opacity: 0; transform: scale(.94) rotateY(-70deg); } }

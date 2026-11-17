@@ -44,25 +44,32 @@
   </header>
 
   <!-- Ad slots (placeholders). Swap the inner .ad-creative for a real ad unit later. -->
+  <!-- The ✕ doesn't close the ad: it plays the next one (see the ads section in app.js). -->
   <aside class="ad-slot ad-left" data-ad-slot="left" aria-label="Advertisement">
     <span class="ad-label">Advertisement</span>
-    <a class="ad-creative" href="https://web-programming-production-f0b13bd2.up.railway.app" target="_blank" rel="noopener sponsored">
-      <span class="ad-badge">Ad</span>
-      <span class="ad-x" aria-hidden="true">ⓘ ✕</span>
-      <div class="ad-art" aria-hidden="true">🫠</div>
-      <p class="ad-text">vincent is a gooby goober</p>
-      <span class="ad-cta">Learn more</span>
-    </a>
+    <div class="ad-frame">
+      <a class="ad-creative" href="https://web-programming-production-f0b13bd2.up.railway.app" target="_blank" rel="noopener sponsored">
+        <span class="ad-badge">Ad</span>
+        <div class="ad-art" aria-hidden="true">🫠</div>
+        <p class="ad-text">vincent is a gooby goober</p>
+        <span class="ad-cta">Learn more</span>
+      </a>
+      <span class="ad-info" aria-hidden="true">ⓘ</span>
+      <button class="ad-close" type="button" aria-label="Close ad">✕</button>
+    </div>
   </aside>
   <aside class="ad-slot ad-right" data-ad-slot="right" aria-label="Advertisement">
     <span class="ad-label">Advertisement</span>
-    <a class="ad-creative alt" href="https://web-programming-production-f0b13bd2.up.railway.app" target="_blank" rel="noopener sponsored">
-      <span class="ad-badge">Ad</span>
-      <span class="ad-x" aria-hidden="true">ⓘ ✕</span>
-      <div class="ad-art" aria-hidden="true">🤪</div>
-      <p class="ad-text">vincent is a gooby goober</p>
-      <span class="ad-cta">Shop now</span>
-    </a>
+    <div class="ad-frame">
+      <a class="ad-creative alt" href="https://web-programming-production-f0b13bd2.up.railway.app" target="_blank" rel="noopener sponsored">
+        <span class="ad-badge">Ad</span>
+        <div class="ad-art" aria-hidden="true">🤪</div>
+        <p class="ad-text">vincent is a gooby goober</p>
+        <span class="ad-cta">Shop now</span>
+      </a>
+      <span class="ad-info" aria-hidden="true">ⓘ</span>
+      <button class="ad-close" type="button" aria-label="Close ad">✕</button>
+    </div>
   </aside>
 
   <main class="layout">
