@@ -5,7 +5,7 @@
   const MAX_TRIES = 6;
   const IMG_DIR = "assets/items/";
 
-  // Two endless modes. Each has its own objectives, saved game and stats.
+  // Three endless modes. Each has its own objectives, saved game and stats.
   const MODES = {
     imposter: {
       label: "Imposter",
@@ -18,6 +18,12 @@
       objectives: ["miss", "item"],
       intro: "One component of this recipe is <b>missing</b>. Name it, and tell me what the full recipe builds into.",
       tip: "Type the missing component, then the finished item.",
+    },
+    build: {
+      label: "Build",
+      objectives: ["item"],
+      intro: "Here's a complete recipe. What does it <b>build into</b>?",
+      tip: "Type the finished item.",
     },
   };
   const OBJ_TEXT = {
@@ -100,7 +106,9 @@
     const recipe = item.from;
     const p = { seed, mode: m, itemId: item.id, recipe, missing: null, imposter: null };
 
-    if (m === "missing") {
+    if (m === "build") {
+      p.board = shuffle(recipe.map((id) => ({ kind: "real", id })), r);
+    } else if (m === "missing") {
       const missingIdx = Math.floor(r() * recipe.length);
       p.missing = recipe[missingIdx];
       const shown = recipe.filter((_, i) => i !== missingIdx).map((id) => ({ kind: "real", id }));
@@ -185,18 +193,19 @@
 
   function renderBoard() {
     tilesEl.replaceChildren();
+    const branch = (el, state = "") => tilesEl.append(h("li", { class: `branch ${state}` }, el));
     puzzle.board.forEach((t, i) => {
       if (t.kind === "missing") {
         const found = game.solved.miss || (game.done && puzzle.missing);
         const el = h("div", { class: `tile missing ${found ? "found" : ""}`, "aria-label": "Missing component" });
         if (found) { const c = byId.get(found); el.append(icon(c), tileLabel(c.name, gold(c.cost))); }
         else el.append("?", tileLabel("Missing", "?g"));
-        tilesEl.append(el);
+        branch(el, found ? "ok" : "pending");
         return;
       }
       const c = byId.get(t.id);
       if (mode !== "imposter") {
-        tilesEl.append(h("div", { class: "tile" }, icon(c), tileLabel(c.name, gold(c.cost))));
+        branch(h("div", { class: "tile" }, icon(c), tileLabel(c.name, gold(c.cost))));
         return;
       }
       const caught = game.solved.imp === i || (game.done && t.kind === "imposter");
@@ -208,7 +217,7 @@
         disabled: game.done || game.solved.imp != null || verified,
         onclick: () => { sel.imp = sel.imp === i ? null : i; renderBoard(); renderSlots(); if (sel.imp != null) focusNext(); },
       }, icon(c), tileLabel(c.name, gold(c.cost)));
-      tilesEl.append(el);
+      branch(el, caught ? "cut" : verified ? "ok" : "");
     });
 
     finalEl.replaceChildren();
@@ -217,6 +226,7 @@
     if (found) { const it = byId.get(puzzle.itemId); f.append(icon(it), tileLabel(it.name, gold(it.cost))); }
     else f.append("?", tileLabel("Finished item", "?g"));
     finalEl.append(f);
+    $("#tree").classList.toggle("solved", !!found);
 
     document.querySelectorAll("#objectives li").forEach((li) => li.classList.toggle("done", game.solved[li.dataset.obj] != null));
   }
@@ -524,11 +534,10 @@
   }
 
   function endActions() {
-    const other = mode === "imposter" ? "missing" : "imposter";
     return h("div", { class: "btn-row" },
       h("button", { class: "btn primary", onclick: nextPuzzle }, "Next puzzle"),
       h("button", { class: "btn", onclick: share }, "Share result"),
-      h("button", { class: "btn", onclick: () => switchMode(other) }, `Try ${MODES[other].label} mode`));
+      Object.keys(MODES).filter((m) => m !== mode).map((m) => h("button", { class: "btn", onclick: () => switchMode(m) }, `Try ${MODES[m].label}`)));
   }
 
   function share() {

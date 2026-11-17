@@ -2,8 +2,9 @@
 
 # Recipe Rift
 
-An endless League of Legends item puzzle with two modes:
+An endless League of Legends item puzzle. Every puzzle is shown as a recipe tree (finished item on top, components branching below), with three modes:
 
+- **Build** – the full recipe is shown. Name the finished item.
 - **Imposter** – the full recipe is shown plus one component that doesn't belong. Tap the imposter, then name the finished item.
 - **Missing** – one real component is hidden behind the `?` tile. Name it, then name the finished item.
 

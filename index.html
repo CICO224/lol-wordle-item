@@ -26,6 +26,7 @@
     <div class="seg" role="tablist" aria-label="Game mode">
       <button role="tab" data-mode="imposter" aria-selected="true">Imposter</button>
       <button role="tab" data-mode="missing" aria-selected="false">Missing</button>
+      <button role="tab" data-mode="build" aria-selected="false">Build</button>
     </div>
 
     <div class="actions">
@@ -50,12 +51,9 @@
         <button class="link-btn" id="btn-giveup" type="button">Give up</button>
       </div>
 
-      <div class="recipe">
-        <div class="tiles" id="tiles"></div>
-        <div class="arrow" aria-hidden="true">
-          <svg viewBox="0 0 48 24"><path d="M2 12h40M34 4l8 8-8 8"/></svg>
-        </div>
+      <div class="tree" id="tree">
         <div class="final" id="final"></div>
+        <ul class="branches" id="tiles" aria-label="Components"></ul>
       </div>
 
       <ol class="objectives" id="objectives"></ol>
@@ -87,11 +85,11 @@
   <dialog id="dlg-help" class="modal">
     <form method="dialog">
       <h2>How to play</h2>
-      <p>The board shows the recipe of a finished item, but it has been tampered with. There are two endless modes:</p>
+      <p>The board shows a recipe tree: the hidden finished item on top, its components below. There are three endless modes:</p>
       <ul class="rules">
-        <li><span class="badge bad">I</span><span><b>Imposter</b>: every real component is shown, plus one that doesn't belong. Tap the imposter.</span></li>
-        <li><span class="badge q">M</span><span><b>Missing</b>: one real component is hidden behind the <b>?</b> tile. Name it.</span></li>
-        <li><span class="badge good">+</span><span>In both modes, also name the <b>finished item</b> the real recipe builds into.</span></li>
+        <li><span class="badge good">B</span><span><b>Build</b>: the full recipe is shown. Name the finished item.</span></li>
+        <li><span class="badge bad">I</span><span><b>Imposter</b>: one extra component doesn't belong. Tap it, then name the finished item.</span></li>
+        <li><span class="badge q">M</span><span><b>Missing</b>: one component is hidden behind the <b>?</b> tile. Name it, then name the finished item.</span></li>
       </ul>
       <p>You get <b>6 attempts</b>. Correct answers lock in. Every item shows its gold price, and the Oracle tells you whether the answer costs more or less than your guess.</p>
       <p class="muted">Each mode keeps its own stats and streak. Giving up counts as a loss.</p>
@@ -105,6 +103,7 @@
       <div class="seg stats-seg" id="stats-seg" role="tablist" aria-label="Stats for mode">
         <button type="button" role="tab" data-mode="imposter">Imposter</button>
         <button type="button" role="tab" data-mode="missing">Missing</button>
+        <button type="button" role="tab" data-mode="build">Build</button>
       </div>
       <div class="stat-grid" id="stat-grid"></div>
       <h3>Guess distribution</h3>
