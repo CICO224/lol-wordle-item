@@ -710,3 +710,7 @@ a.ad-creative:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 .ad-creative.swap-in { animation: ad-in .32s cubic-bezier(.2, 1.4, .4, 1); }
 @keyframes ad-out { to { opacity: 0; transform: scale(.94) rotateY(70deg); } }
 @keyframes ad-in { from { opacity: 0; transform: scale(.94) rotateY(-70deg); } }
+
+/* ---- v14: board actions (Give up · Reset) ---- */
+.board-actions { display: inline-flex; gap: 14px; }
+#btn-reset-mode:hover { color: var(--bad); }

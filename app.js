@@ -141,7 +141,6 @@
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
   }
-  const shuffle = (arr, r) => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
   // Friendly stat names for hints.
   const TAG = {
@@ -216,13 +215,14 @@
     const recipe = item.from;
     const p = { seed, mode: m, itemId: item.id, recipe, missing: null, imposter: null };
 
+    // Components keep League's recipe order (the order the in-game shop shows).
     if (m === "build") {
-      p.board = shuffle(recipe.map((id) => ({ kind: "real", id })), r);
+      p.board = recipe.map((id) => ({ kind: "real", id }));
     } else if (m === "missing") {
       const missingIdx = Math.floor(r() * recipe.length);
       p.missing = recipe[missingIdx];
-      const shown = recipe.filter((_, i) => i !== missingIdx).map((id) => ({ kind: "real", id }));
-      p.board = shuffle([...shown, { kind: "missing" }], r);
+      // The "?" sits exactly where the missing component belongs.
+      p.board = recipe.map((id, i) => (i === missingIdx ? { kind: "missing" } : { kind: "real", id }));
     } else {
       // A plausible imposter: not in the recipe, shares stats with the item, similar cost.
       const inRecipe = new Set(recipe);
@@ -233,7 +233,9 @@
         .map((c) => ({ c, score: statSet(c).filter((s) => itemStats.has(s)).length * 2 - Math.abs(c.cost - avgCost) / 1000 + r() * 1.5 }))
         .sort((a, b) => b.score - a.score);
       p.imposter = scored[Math.floor(r() * Math.min(6, scored.length))].c.id;
-      p.board = shuffle([...recipe.map((id) => ({ kind: "real", id })), { kind: "imposter", id: p.imposter }], r);
+      // Real components in League's order; the imposter is slipped in at a random spot.
+      p.board = recipe.map((id) => ({ kind: "real", id }));
+      p.board.splice(Math.floor(r() * (recipe.length + 1)), 0, { kind: "imposter", id: p.imposter });
     }
     return p;
   }
@@ -540,7 +542,12 @@
       else if (!$("#send").disabled) submit();
       else if (!suggest.hidden && opts[hl]) choose(opts[hl]);
     } else if (e.key === "Escape") { closeSuggest(); q.blur(); }
-    else if (e.key === "Tab" && !e.shiftKey) {
+    else if (e.key === "Tab" && !suggest.hidden && opts.length) {
+      // With the list open, Tab / Shift+Tab step through the options (and scroll to them).
+      e.preventDefault();
+      moveHl(e.shiftKey ? -1 : 1);
+    } else if (e.key === "Tab" && !e.shiftKey) {
+      // With the list closed, Tab switches to the next answer slot.
       const order = open();
       if (order.length > 1) { e.preventDefault(); setActive(order[(order.indexOf(active) + 1) % order.length]); }
     }
@@ -629,6 +636,22 @@
     busy = false;
   }
   $("#btn-giveup").addEventListener("click", giveUp);
+
+  // Start the current mode over: clears its stats, streak and puzzle. Not counted as a loss.
+  function resetMode() {
+    if (busy) return;
+    if (!confirm(`Reset ${MODES[mode].label} mode? This clears its stats, streak and current puzzle.`)) return;
+    sfx.mode();
+    delete stats[mode];
+    store.set("rr:stats:v2", stats);
+    store.set(SAVE_KEY(), null);
+    closeSuggest();
+    q.value = "";
+    loadGame();
+    toast(`${MODES[mode].label} mode reset`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  $("#btn-reset-mode").addEventListener("click", resetMode);
 
   // ---------- Boris (the assistant) ----------
   const asNode = (c) => (typeof c === "string" ? html(c) : c);
