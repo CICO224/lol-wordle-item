@@ -28,7 +28,13 @@ for (const [id, i] of Object.entries(d)) {
   if (ok(id) && i.into?.some((x) => finals.some(([f]) => f === x))) componentIds.add(id);
 }
 
-const pick = (id) => ({ id, name: d[id].name, slug: slug(d[id].name), cost: d[id].gold.total, tags: d[id].tags || [] });
+// Stat lines from the tooltip, e.g. ["40 Ability Power", "300 Mana"].
+const statLines = (i) => {
+  const m = i.description.match(/<stats>([\s\S]*?)<\/stats>/);
+  if (!m) return [];
+  return m[1].split(/<br\s*\/?>/i).map((l) => l.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()).filter(Boolean);
+};
+const pick = (id) => ({ id, name: d[id].name, slug: slug(d[id].name), cost: d[id].gold.total, tags: d[id].tags || [], stats: statLines(d[id]) });
 const seen = new Set(); // some items exist twice under different ids (e.g. Tear of the Goddess)
 const components = [...componentIds].filter((id) => !seen.has(d[id].name) && seen.add(d[id].name)).map(pick).sort((a, b) => a.name.localeCompare(b.name));
 const items = finals.map(([id, i]) => ({ ...pick(id), from: i.from })).sort((a, b) => a.name.localeCompare(b.name));

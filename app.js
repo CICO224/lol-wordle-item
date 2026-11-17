@@ -34,7 +34,6 @@
   const SHARE_ICON = { imp: "🕵️", miss: "🧩", item: "⚔️" };
 
   const byId = new Map([...components, ...items].map((x) => [x.id, x]));
-  const recipeKey = (ids) => [...ids].sort().join("+");
   const gold = (n) => `${n.toLocaleString("en-US")}g`;
 
   // ---------- helpers ----------
@@ -97,11 +96,46 @@
     return wrap;
   }
   const mini = (x) => icon(x, "mini");
-  const tileLabel = (name, cost) => h("span", { class: "name" }, name, h("span", { class: "g" }, cost));
+  // Short stat names so they fit inside the boxes; the hint panel uses the full names.
+  const SHORT = {
+    "Ability Power": "AP", "Attack Damage": "AD", "Attack Speed": "AS", "Ability Haste": "AH", Health: "HP",
+    "Magic Resist": "MR", "Move Speed": "MS", "Base Mana Regen": "Mana Regen", "Base Health Regen": "HP Regen",
+    "Magic Penetration": "Magic Pen", "Armor Penetration": "Armor Pen", "Critical Strike Chance": "Crit",
+    "Critical Strike Damage": "Crit Dmg", "Heal and Shield Power": "Heal & Shield",
+  };
+  const splitStat = (line) => { const m = line.match(/^([\d.]+%?) (.+)$/); return m ? [m[1], m[2]] : ["", line]; };
+  const shortStat = (line) => { const [n, k] = splitStat(line); return `${n} ${SHORT[k] || k}`.trim(); };
+  const statLines = (x) => h("span", { class: "st" }, x.stats.map((l) => h("span", {}, shortStat(l))));
+  // A tree node: icon box on top, caption (name, gold, stats) below.
+  const caption = (name, cost, x) => h("span", { class: "cap" }, h("span", { class: "nm" }, name), h("span", { class: "g" }, cost), x ? statLines(x) : null);
+  const node = (tag, attrs, tileCls, tileKids, cap) => h(tag, { class: "node", ...attrs }, h("span", { class: `tile ${tileCls}` }, tileKids), cap);
 
   // ---------- puzzle generation ----------
+  // The hint panel shows the finished item's gold and stats, so a puzzle has a single answer
+  // when exactly one (item, missing/imposter) pair fits both the board and the hint.
+  const sig = (x) => `${x.cost}|${x.stats.join(";")}`;
+  const minus = (from, shown) => { const p = [...from]; for (const id of shown) { const j = p.indexOf(id); if (j < 0) return null; p.splice(j, 1); } return p; };
+  function solutionCount(p) {
+    const target = sig(byId.get(p.itemId));
+    const pool = items.filter((x) => sig(x) === target);
+    const ids = p.board.filter((t) => t.kind !== "missing").map((t) => t.id);
+    if (p.mode === "build") return pool.filter((x) => minus(x.from, ids)?.length === 0).length;
+    if (p.mode === "missing") return pool.filter((x) => minus(x.from, ids)?.length === 1).length;
+    let n = 0;
+    ids.forEach((_, i) => { const rest = ids.filter((__, j) => j !== i); n += pool.filter((x) => minus(x.from, rest)?.length === 0).length; });
+    return n;
+  }
+
   function makePuzzle(seed, m) {
     const r = rng(seed);
+    for (let tries = 0; tries < 50; tries++) {
+      const p = buildPuzzle(r, seed, m);
+      if (solutionCount(p) === 1) return p;
+    }
+    return buildPuzzle(r, seed, m);
+  }
+
+  function buildPuzzle(r, seed, m) {
     const item = items[Math.floor(r() * items.length)];
     const recipe = item.from;
     const p = { seed, mode: m, itemId: item.id, recipe, missing: null, imposter: null };
@@ -142,7 +176,7 @@
   }
 
   function loadGame() {
-    const saved = store.get(`rr:game:${mode}`, null);
+    const saved = store.get(`rr:game:v4:${mode}`, null);
     if (saved && !saved.game.done) {
       puzzle = makePuzzle(saved.seed, mode);
       game = saved.game;
@@ -159,12 +193,12 @@
   }
 
   function nextPuzzle() {
-    store.set(`rr:game:${mode}`, null);
+    store.set(`rr:game:v4:${mode}`, null);
     loadGame();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function save() { store.set(`rr:game:${mode}`, { seed: puzzle.seed, game }); }
+  function save() { store.set(`rr:game:v4:${mode}`, { seed: puzzle.seed, game }); }
 
   // ---------- rendering ----------
   const tilesEl = $("#tiles"), finalEl = $("#final"), feed = $("#feed"), q = $("#q"), suggest = $("#suggest");
@@ -197,35 +231,39 @@
     puzzle.board.forEach((t, i) => {
       if (t.kind === "missing") {
         const found = game.solved.miss || (game.done && puzzle.missing);
-        const el = h("div", { class: `tile missing ${found ? "found" : ""}`, "aria-label": "Missing component" });
-        if (found) { const c = byId.get(found); el.append(icon(c), tileLabel(c.name, gold(c.cost))); }
-        else el.append("?", tileLabel("Missing", "?g"));
-        branch(el, found ? "ok" : "pending");
+        const c = found && byId.get(found);
+        branch(found
+          ? node("div", { "aria-label": `Missing component: ${c.name}` }, "missing found", icon(c), caption(c.name, gold(c.cost), c))
+          : node("div", { "aria-label": "Missing component" }, "missing", "?", caption("Missing", "?g")), found ? "ok" : "pending");
         return;
       }
       const c = byId.get(t.id);
       if (mode !== "imposter") {
-        branch(h("div", { class: "tile" }, icon(c), tileLabel(c.name, gold(c.cost))));
+        branch(node("div", {}, "", icon(c), caption(c.name, gold(c.cost), c)));
         return;
       }
       const caught = game.solved.imp === i || (game.done && t.kind === "imposter");
       const verified = game.verified.includes(i) || (game.solved.imp != null && t.kind === "real") || (game.done && t.kind === "real");
-      const el = h("button", {
-        class: `tile ${sel.imp === i && !caught ? "selected" : ""} ${caught ? "caught" : ""} ${verified ? "verified" : ""}`,
+      const el = node("button", {
         "aria-label": `${c.name}, ${gold(c.cost)}${caught ? " (imposter)" : verified ? " (in recipe)" : ""}`,
         "aria-pressed": String(sel.imp === i),
         disabled: game.done || game.solved.imp != null || verified,
         onclick: () => { sel.imp = sel.imp === i ? null : i; renderBoard(); renderSlots(); if (sel.imp != null) focusNext(); },
-      }, icon(c), tileLabel(c.name, gold(c.cost)));
+      }, `${sel.imp === i && !caught ? "selected" : ""} ${caught ? "caught" : ""} ${verified ? "verified" : ""}`, icon(c), caption(c.name, gold(c.cost), c));
       branch(el, caught ? "cut" : verified ? "ok" : "");
     });
 
     finalEl.replaceChildren();
     const found = game.solved.item || (game.done && puzzle.itemId);
-    const f = h("div", { class: `tile missing ${found ? "found pop" : ""}` });
-    if (found) { const it = byId.get(puzzle.itemId); f.append(icon(it), tileLabel(it.name, gold(it.cost))); }
-    else f.append("?", tileLabel("Finished item", "?g"));
-    finalEl.append(f);
+    const it = byId.get(puzzle.itemId);
+    finalEl.append(found
+      ? node("div", {}, "missing found pop", icon(it), caption(it.name, gold(it.cost)))
+      : node("div", {}, "missing", "?", caption("Finished item", gold(it.cost))));
+    // Side hint: the finished item's gold and full stats.
+    $("#hint").replaceChildren(
+      h("span", { class: "hint-k" }, "Hint"),
+      h("span", { class: "hint-g" }, gold(it.cost)),
+      h("ul", {}, it.stats.map((l) => { const [n, k] = splitStat(l); return h("li", {}, h("b", {}, n), " ", k); })));
     $("#tree").classList.toggle("solved", !!found);
 
     document.querySelectorAll("#objectives li").forEach((li) => li.classList.toggle("done", game.solved[li.dataset.obj] != null));
@@ -313,7 +351,7 @@
     opts.forEach((x, i) => {
       const name = term ? esc(x.name).replace(new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "i"), "<mark>$1</mark>") : esc(x.name);
       suggest.append(h("button", { class: `opt ${i === hl ? "hl" : ""} ${tried(active, x) ? "tried" : ""}`, role: "option", onmousedown: (e) => e.preventDefault(), onclick: () => choose(x) },
-        mini(x), h("span", {}, html(name)), h("span", { class: "cost" }, gold(x.cost))));
+        mini(x), h("span", { class: "on" }, h("span", {}, html(name)), h("span", { class: "os" }, x.stats.map(shortStat).join(" · "))), h("span", { class: "cost" }, gold(x.cost))));
     });
     suggest.hidden = false;
   }
@@ -366,8 +404,7 @@
     const res = {};
     if (uses("imp")) res.imp = g.imp != null && puzzle.board[g.imp].kind === "imposter";
     if (uses("miss")) res.miss = g.miss === puzzle.missing;
-    // Any item with exactly the same recipe counts.
-    res.item = recipeKey(byId.get(g.item).from) === recipeKey(realItem.from);
+    res.item = g.item === realItem.id;
     return res;
   }
 
@@ -466,7 +503,7 @@
     if (uses("imp")) chips.push(chip("Imp", byId.get(puzzle.board[g.imp].id), g.res.imp));
     if (uses("miss")) { const x = byId.get(g.miss); chips.push(chip("Miss", x, g.res.miss, g.res.miss ? null : arrow(x, byId.get(puzzle.missing)))); }
     const it = byId.get(g.item);
-    chips.push(chip("Item", it, g.res.item, g.res.item ? null : arrow(it, byId.get(puzzle.itemId))));
+    chips.push(chip("Item", it, g.res.item));
     const node = h("div", { class: "msg user" }, h("div", { class: "bubble" }, chips));
     if (instant) node.style.animation = "none";
     feed.append(node);
@@ -504,17 +541,22 @@
       const shared = statSet(item).filter((s) => statSet(itemAns).includes(s));
       const pool = [...itemAns.from];
       const common = item.from.filter((id) => { const j = pool.indexOf(id); return j >= 0 && pool.splice(j, 1); }).length;
-      lines.push(`Not <b>${esc(item.name)}</b>. The answer ${costPhrase(item, itemAns)}. ${shared.length ? `Shared stats: ${tagsHtml(shared)}.` : "No shared stats."} ${common ? `Its recipe overlaps on ${common} component${common > 1 ? "s" : ""}.` : ""}`);
+      lines.push(`Not <b>${esc(item.name)}</b> (${gold(item.cost)}). ${shared.length ? `It shares ${tagsHtml(shared)} with the answer` : "Its stats are nothing like the answer"}${common ? `, and its recipe overlaps on ${common} component${common > 1 ? "s" : ""}` : ""}. Compare it with the hint panel.`);
     }
 
-    if (n === 3 && !g.res.item) lines.push(`<span class="muted">Hint: the finished item grants ${tagsHtml(statSet(itemAns))}.</span>`);
+    if (n === 3) {
+      const extra = [];
+      if (uses("miss") && !g.res.miss) extra.push(`the missing component costs <b>${gold(byId.get(puzzle.missing).cost)}</b>`);
+      if (uses("imp") && !g.res.imp) extra.push(`the imposter's name starts with <b>${esc(byId.get(puzzle.imposter).name[0])}</b>`);
+      if (!g.res.item) extra.push(`the finished item's name starts with <b>${esc(itemAns.name[0])}</b>`);
+      if (extra.length) lines.push(`<span class="muted">Extra hint: ${extra.join(", and ")}.</span>`);
+    }
     if (n === MAX_TRIES - 1 && !objectives().every((k) => g.res[k])) lines.push(`<span class="muted">Last attempt. Make it count.</span>`);
     return lines.map((l) => `<p>${l}</p>`).join("");
   }
 
   function endMessage() {
     const it = byId.get(puzzle.itemId);
-    const twins = items.filter((x) => x.id !== it.id && recipeKey(x.from) === recipeKey(it.from));
     const recipe = it.from.map((id) => byId.get(id));
     const s = statFor(mode);
     const head = game.won
@@ -528,7 +570,6 @@
     frag.append(box);
     const notes = [];
     if (puzzle.imposter) notes.push(`The imposter was <b>${esc(byId.get(puzzle.imposter).name)}</b> (${gold(byId.get(puzzle.imposter).cost)}).`);
-    if (twins.length) notes.push(`${twins.map((t) => esc(t.name)).join(", ")} share${twins.length > 1 ? "" : "s"} this exact recipe, so ${twins.length > 1 ? "they were" : "it was"} accepted too.`);
     if (notes.length) frag.append(html(`<p class="muted">${notes.join(" ")}</p>`));
     return frag;
   }

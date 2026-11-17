@@ -10,6 +10,10 @@ window.GAME_DATA = {
    "tags": [
     "NonbootsMovement",
     "SpellDamage"
+   ],
+   "stats": [
+    "30 Ability Power",
+    "4% Move Speed"
    ]
   },
   {
@@ -19,6 +23,9 @@ window.GAME_DATA = {
    "cost": 400,
    "tags": [
     "SpellDamage"
+   ],
+   "stats": [
+    "20 Ability Power"
    ]
   },
   {
@@ -28,6 +35,9 @@ window.GAME_DATA = {
    "cost": 1300,
    "tags": [
     "Damage"
+   ],
+   "stats": [
+    "40 Attack Damage"
    ]
   },
   {
@@ -38,6 +48,10 @@ window.GAME_DATA = {
    "tags": [
     "Health",
     "AbilityHaste"
+   ],
+   "stats": [
+    "150 Health",
+    "5 Ability Haste"
    ]
   },
   {
@@ -50,6 +64,11 @@ window.GAME_DATA = {
     "ManaRegen",
     "CooldownReduction",
     "AbilityHaste"
+   ],
+   "stats": [
+    "20 Ability Power",
+    "100% Base Mana Regen",
+    "10 Ability Haste"
    ]
   },
   {
@@ -59,6 +78,9 @@ window.GAME_DATA = {
    "cost": 850,
    "tags": [
     "SpellDamage"
+   ],
+   "stats": [
+    "45 Ability Power"
    ]
   },
   {
@@ -69,6 +91,10 @@ window.GAME_DATA = {
    "tags": [
     "MagicPenetration",
     "SpellDamage"
+   ],
+   "stats": [
+    "25 Ability Power",
+    "13% Magic Penetration"
    ]
   },
   {
@@ -78,6 +104,9 @@ window.GAME_DATA = {
    "cost": 800,
    "tags": [
     "Armor"
+   ],
+   "stats": [
+    "30 Armor"
    ]
   },
   {
@@ -90,6 +119,10 @@ window.GAME_DATA = {
     "HealthRegen",
     "Mana",
     "ManaRegen"
+   ],
+   "stats": [
+    "300 Health",
+    "375 Mana"
    ]
   },
   {
@@ -101,6 +134,10 @@ window.GAME_DATA = {
     "Damage",
     "CooldownReduction",
     "AbilityHaste"
+   ],
+   "stats": [
+    "20 Attack Damage",
+    "10 Ability Haste"
    ]
   },
   {
@@ -110,6 +147,9 @@ window.GAME_DATA = {
    "cost": 800,
    "tags": [
     "Armor"
+   ],
+   "stats": [
+    "40 Armor"
    ]
   },
   {
@@ -119,6 +159,9 @@ window.GAME_DATA = {
    "cost": 600,
    "tags": [
     "CriticalStrike"
+   ],
+   "stats": [
+    "15% Critical Strike Chance"
    ]
   },
   {
@@ -128,6 +171,9 @@ window.GAME_DATA = {
    "cost": 300,
    "tags": [
     "Armor"
+   ],
+   "stats": [
+    "15 Armor"
    ]
   },
   {
@@ -138,6 +184,10 @@ window.GAME_DATA = {
    "tags": [
     "Health",
     "HealthRegen"
+   ],
+   "stats": [
+    "200 Health",
+    "100% Base Health Regen"
    ]
   },
   {
@@ -147,6 +197,9 @@ window.GAME_DATA = {
    "cost": 250,
    "tags": [
     "AttackSpeed"
+   ],
+   "stats": [
+    "10% Attack Speed"
    ]
   },
   {
@@ -156,6 +209,9 @@ window.GAME_DATA = {
    "cost": 800,
    "tags": [
     "Damage"
+   ],
+   "stats": [
+    "15 Attack Damage"
    ]
   },
   {
@@ -165,6 +221,9 @@ window.GAME_DATA = {
    "cost": 900,
    "tags": [
     "SpellDamage"
+   ],
+   "stats": [
+    "30 Ability Power"
    ]
   },
   {
@@ -176,6 +235,10 @@ window.GAME_DATA = {
     "SpellDamage",
     "CooldownReduction",
     "AbilityHaste"
+   ],
+   "stats": [
+    "25 Ability Power",
+    "10 Ability Haste"
    ]
   },
   {
@@ -185,6 +248,10 @@ window.GAME_DATA = {
    "cost": 600,
    "tags": [
     "ManaRegen"
+   ],
+   "stats": [
+    "50% Base Mana Regen",
+    "8% Heal and Shield Power"
    ]
   },
   {
@@ -194,6 +261,9 @@ window.GAME_DATA = {
    "cost": 900,
    "tags": [
     "Health"
+   ],
+   "stats": [
+    "350 Health"
    ]
   },
   {
@@ -206,6 +276,11 @@ window.GAME_DATA = {
     "Mana",
     "CooldownReduction",
     "AbilityHaste"
+   ],
+   "stats": [
+    "25 Armor",
+    "300 Mana",
+    "10 Ability Haste"
    ]
   },
   {
@@ -216,6 +291,10 @@ window.GAME_DATA = {
    "tags": [
     "Health",
     "SpellDamage"
+   ],
+   "stats": [
+    "30 Ability Power",
+    "200 Health"
    ]
   },
   {
@@ -226,6 +305,10 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "AttackSpeed"
+   ],
+   "stats": [
+    "20 Attack Damage",
+    "20% Attack Speed"
    ]
   },
   {
@@ -236,6 +319,10 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "SpellBlock"
+   ],
+   "stats": [
+    "25 Attack Damage",
+    "25 Magic Resist"
    ]
   },
   {
@@ -245,6 +332,9 @@ window.GAME_DATA = {
    "cost": 1100,
    "tags": [
     "SpellDamage"
+   ],
+   "stats": [
+    "45 Ability Power"
    ]
   },
   {
@@ -256,6 +346,10 @@ window.GAME_DATA = {
     "Health",
     "CooldownReduction",
     "AbilityHaste"
+   ],
+   "stats": [
+    "200 Health",
+    "10 Ability Haste"
    ]
   },
   {
@@ -266,6 +360,10 @@ window.GAME_DATA = {
    "tags": [
     "ArmorPenetration",
     "Damage"
+   ],
+   "stats": [
+    "20 Attack Damage",
+    "18% Armor Penetration"
    ]
   },
   {
@@ -276,6 +374,9 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "Lane"
+   ],
+   "stats": [
+    "10 Attack Damage"
    ]
   },
   {
@@ -289,6 +390,11 @@ window.GAME_DATA = {
     "ManaRegen",
     "CooldownReduction",
     "AbilityHaste"
+   ],
+   "stats": [
+    "40 Ability Power",
+    "300 Mana",
+    "10 Ability Haste"
    ]
   },
   {
@@ -298,6 +404,9 @@ window.GAME_DATA = {
    "cost": 1200,
    "tags": [
     "SpellDamage"
+   ],
+   "stats": [
+    "65 Ability Power"
    ]
   },
   {
@@ -307,6 +416,9 @@ window.GAME_DATA = {
    "cost": 850,
    "tags": [
     "SpellBlock"
+   ],
+   "stats": [
+    "45 Magic Resist"
    ]
   },
   {
@@ -317,6 +429,10 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "CriticalStrike"
+   ],
+   "stats": [
+    "15 Attack Damage",
+    "20% Critical Strike Chance"
    ]
   },
   {
@@ -326,6 +442,9 @@ window.GAME_DATA = {
    "cost": 400,
    "tags": [
     "SpellBlock"
+   ],
+   "stats": [
+    "20 Magic Resist"
    ]
   },
   {
@@ -335,6 +454,9 @@ window.GAME_DATA = {
    "cost": 800,
    "tags": [
     "SpellDamage"
+   ],
+   "stats": [
+    "25 Ability Power"
    ]
   },
   {
@@ -346,6 +468,10 @@ window.GAME_DATA = {
     "Health",
     "Damage",
     "NonbootsMovement"
+   ],
+   "stats": [
+    "15 Attack Damage",
+    "200 Health"
    ]
   },
   {
@@ -355,6 +481,9 @@ window.GAME_DATA = {
    "cost": 875,
    "tags": [
     "Damage"
+   ],
+   "stats": [
+    "25 Attack Damage"
    ]
   },
   {
@@ -365,6 +494,9 @@ window.GAME_DATA = {
    "tags": [
     "Active",
     "SpellBlock"
+   ],
+   "stats": [
+    "30 Magic Resist"
    ]
   },
   {
@@ -375,6 +507,10 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "NonbootsMovement"
+   ],
+   "stats": [
+    "15 Attack Damage",
+    "4% Move Speed"
    ]
   },
   {
@@ -385,6 +521,9 @@ window.GAME_DATA = {
    "tags": [
     "AttackSpeed",
     "OnHit"
+   ],
+   "stats": [
+    "15% Attack Speed"
    ]
   },
   {
@@ -394,6 +533,9 @@ window.GAME_DATA = {
    "cost": 300,
    "tags": [
     "HealthRegen"
+   ],
+   "stats": [
+    "100% Base Health Regen"
    ]
   },
   {
@@ -403,6 +545,9 @@ window.GAME_DATA = {
    "cost": 400,
    "tags": [
     "Health"
+   ],
+   "stats": [
+    "150 Health"
    ]
   },
   {
@@ -412,6 +557,9 @@ window.GAME_DATA = {
    "cost": 600,
    "tags": [
     "AttackSpeed"
+   ],
+   "stats": [
+    "20% Attack Speed"
    ]
   },
   {
@@ -423,6 +571,10 @@ window.GAME_DATA = {
     "Armor",
     "SpellDamage",
     "Active"
+   ],
+   "stats": [
+    "40 Ability Power",
+    "25 Armor"
    ]
   },
   {
@@ -433,6 +585,10 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "ArmorPenetration"
+   ],
+   "stats": [
+    "20 Attack Damage",
+    "10 Lethality"
    ]
   },
   {
@@ -443,6 +599,9 @@ window.GAME_DATA = {
    "tags": [
     "OnHit",
     "AbilityHaste"
+   ],
+   "stats": [
+    "10 Ability Haste"
    ]
   },
   {
@@ -454,6 +613,11 @@ window.GAME_DATA = {
     "Health",
     "HealthRegen",
     "SpellBlock"
+   ],
+   "stats": [
+    "200 Health",
+    "35 Magic Resist",
+    "100% Base Health Regen"
    ]
   },
   {
@@ -464,6 +628,10 @@ window.GAME_DATA = {
    "tags": [
     "Armor",
     "Damage"
+   ],
+   "stats": [
+    "15 Attack Damage",
+    "30 Armor"
    ]
   },
   {
@@ -474,6 +642,9 @@ window.GAME_DATA = {
    "tags": [
     "Mana",
     "ManaRegen"
+   ],
+   "stats": [
+    "240 Mana"
    ]
   },
   {
@@ -485,6 +656,11 @@ window.GAME_DATA = {
     "Damage",
     "CooldownReduction",
     "ArmorPenetration"
+   ],
+   "stats": [
+    "25 Attack Damage",
+    "10 Ability Haste",
+    "5 Lethality"
    ]
   },
   {
@@ -495,6 +671,9 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "OnHit"
+   ],
+   "stats": [
+    "25 Attack Damage"
    ]
   },
   {
@@ -505,6 +684,10 @@ window.GAME_DATA = {
    "tags": [
     "Health",
     "Damage"
+   ],
+   "stats": [
+    "15 Attack Damage",
+    "250 Health"
    ]
   },
   {
@@ -515,6 +698,10 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "LifeSteal"
+   ],
+   "stats": [
+    "15 Attack Damage",
+    "7% Life Steal"
    ]
   },
   {
@@ -525,6 +712,10 @@ window.GAME_DATA = {
    "tags": [
     "SpellBlock",
     "SpellDamage"
+   ],
+   "stats": [
+    "40 Ability Power",
+    "25 Magic Resist"
    ]
   },
   {
@@ -534,6 +725,9 @@ window.GAME_DATA = {
    "cost": 1000,
    "tags": [
     "Armor"
+   ],
+   "stats": [
+    "40 Armor"
    ]
   },
   {
@@ -544,6 +738,10 @@ window.GAME_DATA = {
    "tags": [
     "Health",
     "NonbootsMovement"
+   ],
+   "stats": [
+    "200 Health",
+    "4% Move Speed"
    ]
   },
   {
@@ -555,6 +753,11 @@ window.GAME_DATA = {
     "CriticalStrike",
     "AttackSpeed",
     "NonbootsMovement"
+   ],
+   "stats": [
+    "15% Attack Speed",
+    "15% Critical Strike Chance",
+    "4% Move Speed"
    ]
   }
  ],
@@ -571,6 +774,11 @@ window.GAME_DATA = {
     "MagicResist",
     "AbilityHaste"
    ],
+   "stats": [
+    "350 Health",
+    "45 Magic Resist",
+    "15 Ability Haste"
+   ],
    "from": [
     "3067",
     "1057"
@@ -586,6 +794,11 @@ window.GAME_DATA = {
     "Mana",
     "AbilityHaste"
    ],
+   "stats": [
+    "90 Ability Power",
+    "300 Mana",
+    "10 Ability Haste"
+   ],
    "from": [
     "3802",
     "1026"
@@ -600,6 +813,11 @@ window.GAME_DATA = {
     "SpellDamage",
     "Mana",
     "AbilityHaste"
+   ],
+   "stats": [
+    "70 Ability Power",
+    "600 Mana",
+    "25 Ability Haste"
    ],
    "from": [
     "3070",
@@ -618,6 +836,12 @@ window.GAME_DATA = {
     "ManaRegen",
     "NonbootsMovement"
    ],
+   "stats": [
+    "45 Ability Power",
+    "10% Heal and Shield Power",
+    "125% Base Mana Regen",
+    "4% Move Speed"
+   ],
    "from": [
     "3113",
     "3114"
@@ -632,6 +856,11 @@ window.GAME_DATA = {
     "Damage",
     "ArmorPenetration",
     "AbilityHaste"
+   ],
+   "stats": [
+    "55 Attack Damage",
+    "18 Lethality",
+    "20 Ability Haste"
    ],
    "from": [
     "2020",
@@ -651,6 +880,12 @@ window.GAME_DATA = {
     "NonbootsMovement",
     "AbilityHaste"
    ],
+   "stats": [
+    "200 Health",
+    "15 Ability Haste",
+    "20 Armor",
+    "20 Magic Resist"
+   ],
    "from": [
     "3067",
     "1029",
@@ -666,6 +901,10 @@ window.GAME_DATA = {
     "SpellBlock",
     "SpellDamage"
    ],
+   "stats": [
+    "105 Ability Power",
+    "40 Magic Resist"
+   ],
    "from": [
     "1058",
     "4632"
@@ -680,6 +919,11 @@ window.GAME_DATA = {
     "Damage",
     "ArmorPenetration",
     "AbilityHaste"
+   ],
+   "stats": [
+    "55 Attack Damage",
+    "18 Lethality",
+    "15 Ability Haste"
    ],
    "from": [
     "2020",
@@ -700,6 +944,11 @@ window.GAME_DATA = {
     "ArmorPenetration",
     "AbilityHaste"
    ],
+   "stats": [
+    "45 Attack Damage",
+    "400 Health",
+    "20 Ability Haste"
+   ],
    "from": [
     "3044",
     "3067",
@@ -716,6 +965,11 @@ window.GAME_DATA = {
     "Mana",
     "CooldownReduction",
     "AbilityHaste"
+   ],
+   "stats": [
+    "80 Ability Power",
+    "600 Mana",
+    "20 Ability Haste"
    ],
    "from": [
     "3802",
@@ -734,6 +988,11 @@ window.GAME_DATA = {
     "Slow",
     "OnHit"
    ],
+   "stats": [
+    "40 Attack Damage",
+    "25% Attack Speed",
+    "10% Life Steal"
+   ],
    "from": [
     "1053",
     "1043",
@@ -751,6 +1010,11 @@ window.GAME_DATA = {
     "CooldownReduction",
     "MagicPenetration"
    ],
+   "stats": [
+    "65 Ability Power",
+    "400 Health",
+    "15 Ability Haste"
+   ],
    "from": [
     "3147",
     "3108"
@@ -764,6 +1028,10 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "LifeSteal"
+   ],
+   "stats": [
+    "80 Attack Damage",
+    "15% Life Steal"
    ],
    "from": [
     "1038",
@@ -782,6 +1050,11 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "45 Attack Damage",
+    "450 Health",
+    "15 Ability Haste"
+   ],
    "from": [
     "3123",
     "1011",
@@ -799,6 +1072,12 @@ window.GAME_DATA = {
     "NonbootsMovement",
     "AbilityHaste"
    ],
+   "stats": [
+    "70 Ability Power",
+    "350 Health",
+    "25 Ability Haste",
+    "4% Move Speed"
+   ],
    "from": [
     "3067",
     "3113",
@@ -815,6 +1094,11 @@ window.GAME_DATA = {
     "MagicPenetration",
     "AbilityHaste"
    ],
+   "stats": [
+    "75 Ability Power",
+    "30% Magic Penetration",
+    "20 Ability Haste"
+   ],
    "from": [
     "4630",
     "3108",
@@ -829,6 +1113,11 @@ window.GAME_DATA = {
    "tags": [
     "SpellDamage",
     "ManaRegen"
+   ],
+   "stats": [
+    "45 Ability Power",
+    "16% Heal and Shield Power",
+    "100% Base Mana Regen"
    ],
    "from": [
     "1026",
@@ -847,6 +1136,11 @@ window.GAME_DATA = {
     "Slow",
     "NonbootsMovement"
    ],
+   "stats": [
+    "350 Health",
+    "55 Armor",
+    "4% Move Speed"
+   ],
    "from": [
     "3066",
     "1028",
@@ -862,6 +1156,11 @@ window.GAME_DATA = {
     "Armor",
     "Damage",
     "AbilityHaste"
+   ],
+   "stats": [
+    "60 Attack Damage",
+    "50 Armor",
+    "15 Ability Haste"
    ],
    "from": [
     "2019",
@@ -880,6 +1179,12 @@ window.GAME_DATA = {
     "SpellDamage",
     "OnHit",
     "AbilityHaste"
+   ],
+   "stats": [
+    "300 Health",
+    "60 Ability Power",
+    "20 Ability Haste",
+    "20% Attack Speed"
    ],
    "from": [
     "3057",
@@ -900,6 +1205,12 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "35 Ability Power",
+    "200 Health",
+    "20 Ability Haste",
+    "125% Base Mana Regen"
+   ],
    "from": [
     "3067",
     "4642"
@@ -914,6 +1225,10 @@ window.GAME_DATA = {
     "Damage",
     "CooldownReduction",
     "AbilityHaste"
+   ],
+   "stats": [
+    "60 Attack Damage",
+    "15 Ability Haste"
    ],
    "from": [
     "3133",
@@ -931,6 +1246,11 @@ window.GAME_DATA = {
     "Damage",
     "ArmorPenetration"
    ],
+   "stats": [
+    "50 Attack Damage",
+    "15 Lethality",
+    "250 Health"
+   ],
    "from": [
     "3134",
     "2021"
@@ -947,6 +1267,11 @@ window.GAME_DATA = {
     "SpellVamp",
     "Tenacity",
     "AbilityHaste"
+   ],
+   "stats": [
+    "65 Attack Damage",
+    "5% Omnivamp",
+    "20% Tenacity"
    ],
    "from": [
     "3133",
@@ -967,6 +1292,11 @@ window.GAME_DATA = {
     "OnHit",
     "AbilityHaste"
    ],
+   "stats": [
+    "50 Attack Damage",
+    "20 Ability Haste",
+    "25% Critical Strike Chance"
+   ],
    "from": [
     "3057",
     "3133",
@@ -986,6 +1316,11 @@ window.GAME_DATA = {
     "NonbootsMovement",
     "AbilityHaste"
    ],
+   "stats": [
+    "40 Attack Damage",
+    "20% Attack Speed",
+    "450 Health"
+   ],
    "from": [
     "2021",
     "1042",
@@ -1003,6 +1338,11 @@ window.GAME_DATA = {
     "NonbootsMovement",
     "AbilityHaste"
    ],
+   "stats": [
+    "45% Attack Speed",
+    "25% Critical Strike Chance",
+    "4% Move Speed"
+   ],
    "from": [
     "3086",
     "3144"
@@ -1017,6 +1357,11 @@ window.GAME_DATA = {
     "Health",
     "SpellBlock",
     "NonbootsMovement"
+   ],
+   "stats": [
+    "400 Health",
+    "55 Magic Resist",
+    "4% Move Speed"
    ],
    "from": [
     "1057",
@@ -1036,6 +1381,11 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "75 Armor",
+    "400 Mana",
+    "20 Ability Haste"
+   ],
    "from": [
     "3082",
     "3024"
@@ -1049,6 +1399,10 @@ window.GAME_DATA = {
    "tags": [
     "Armor",
     "Damage"
+   ],
+   "stats": [
+    "55 Attack Damage",
+    "45 Armor"
    ],
    "from": [
     "2019",
@@ -1066,6 +1420,11 @@ window.GAME_DATA = {
     "SpellDamage",
     "OnHit"
    ],
+   "stats": [
+    "30 Attack Damage",
+    "30 Ability Power",
+    "25% Attack Speed"
+   ],
    "from": [
     "1052",
     "1043",
@@ -1081,6 +1440,10 @@ window.GAME_DATA = {
     "Health",
     "HealthRegen"
    ],
+   "stats": [
+    "900 Health",
+    "100% Base Health Regen"
+   ],
    "from": [
     "1011",
     "3801",
@@ -1095,6 +1458,10 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "CriticalStrike"
+   ],
+   "stats": [
+    "55 Attack Damage",
+    "25% Critical Strike Chance"
    ],
    "from": [
     "1037",
@@ -1113,6 +1480,11 @@ window.GAME_DATA = {
     "SpellDamage",
     "Active",
     "SpellVamp"
+   ],
+   "stats": [
+    "80 Ability Power",
+    "40 Attack Damage",
+    "10% Omnivamp"
    ],
    "from": [
     "1053",
@@ -1133,6 +1505,11 @@ window.GAME_DATA = {
     "NonbootsMovement",
     "AbilityHaste"
    ],
+   "stats": [
+    "60 Ability Power",
+    "350 Health",
+    "10 Ability Haste"
+   ],
    "from": [
     "3145",
     "3067",
@@ -1152,6 +1529,12 @@ window.GAME_DATA = {
     "MagicResist",
     "AbilityHaste"
    ],
+   "stats": [
+    "400 Health",
+    "40 Magic Resist",
+    "10 Ability Haste",
+    "100% Base Health Regen"
+   ],
    "from": [
     "6660",
     "3211"
@@ -1165,6 +1548,10 @@ window.GAME_DATA = {
    "tags": [
     "SpellDamage",
     "AbilityHaste"
+   ],
+   "stats": [
+    "75 Ability Power",
+    "25 Ability Haste"
    ],
    "from": [
     "3108",
@@ -1184,6 +1571,11 @@ window.GAME_DATA = {
     "ArmorPenetration",
     "AbilityHaste"
    ],
+   "stats": [
+    "55 Attack Damage",
+    "18 Lethality",
+    "10 Ability Haste"
+   ],
    "from": [
     "3134",
     "3133"
@@ -1198,6 +1590,11 @@ window.GAME_DATA = {
     "Health",
     "Damage",
     "NonbootsMovement"
+   ],
+   "stats": [
+    "40 Attack Damage",
+    "500 Health",
+    "4% Move Speed"
    ],
    "from": [
     "2021",
@@ -1218,6 +1615,11 @@ window.GAME_DATA = {
     "OnHit",
     "AbilityHaste"
    ],
+   "stats": [
+    "300 Health",
+    "50 Armor",
+    "15 Ability Haste"
+   ],
    "from": [
     "3057",
     "1028",
@@ -1232,6 +1634,10 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "CriticalStrike"
+   ],
+   "stats": [
+    "55 Attack Damage",
+    "25% Critical Strike Chance"
    ],
    "from": [
     "1037",
@@ -1249,6 +1655,11 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "60 Ability Power",
+    "15 Ability Haste",
+    "150% Base Mana Regen"
+   ],
    "from": [
     "1052",
     "4642",
@@ -1263,6 +1674,11 @@ window.GAME_DATA = {
    "tags": [
     "CriticalStrike",
     "Damage"
+   ],
+   "stats": [
+    "75 Attack Damage",
+    "25% Critical Strike Chance",
+    "30% Critical Strike Damage"
    ],
    "from": [
     "1038",
@@ -1281,6 +1697,11 @@ window.GAME_DATA = {
     "Armor",
     "MagicResist"
    ],
+   "stats": [
+    "350 Health",
+    "45 Armor",
+    "45 Magic Resist"
+   ],
    "from": [
     "1011",
     "1031",
@@ -1296,6 +1717,11 @@ window.GAME_DATA = {
     "Health",
     "SpellBlock",
     "HealthRegen"
+   ],
+   "stats": [
+    "400 Health",
+    "80 Magic Resist",
+    "100% Base Health Regen"
    ],
    "from": [
     "3211",
@@ -1316,6 +1742,12 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "200 Health",
+    "40 Armor",
+    "10 Ability Haste",
+    "100% Base Health Regen"
+   ],
    "from": [
     "3067",
     "1031",
@@ -1333,6 +1765,11 @@ window.GAME_DATA = {
     "OnHit",
     "NonbootsMovement"
    ],
+   "stats": [
+    "45 Attack Damage",
+    "40% Attack Speed",
+    "4% Move Speed"
+   ],
    "from": [
     "6690",
     "3051",
@@ -1347,6 +1784,10 @@ window.GAME_DATA = {
    "tags": [
     "Health",
     "SpellDamage"
+   ],
+   "stats": [
+    "60 Ability Power",
+    "300 Health"
    ],
    "from": [
     "3147",
@@ -1363,6 +1804,11 @@ window.GAME_DATA = {
     "OnHit",
     "NonbootsMovement",
     "AbilityHaste"
+   ],
+   "stats": [
+    "100 Ability Power",
+    "6% Move Speed",
+    "10 Ability Haste"
    ],
    "from": [
     "3057",
@@ -1384,6 +1830,12 @@ window.GAME_DATA = {
     "MagicResist",
     "AbilityHaste"
    ],
+   "stats": [
+    "200 Health",
+    "30 Armor",
+    "30 Magic Resist",
+    "10 Ability Haste"
+   ],
    "from": [
     "3067",
     "1029",
@@ -1399,6 +1851,11 @@ window.GAME_DATA = {
     "Damage",
     "CriticalStrike",
     "ArmorPenetration"
+   ],
+   "stats": [
+    "35 Attack Damage",
+    "35% Armor Penetration",
+    "25% Critical Strike Chance"
    ],
    "from": [
     "3035",
@@ -1416,6 +1873,11 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "100 Ability Power",
+    "600 Mana",
+    "10 Ability Haste"
+   ],
    "from": [
     "3802",
     "3145"
@@ -1430,6 +1892,11 @@ window.GAME_DATA = {
     "SpellDamage",
     "Mana",
     "AbilityHaste"
+   ],
+   "stats": [
+    "90 Ability Power",
+    "600 Mana",
+    "15 Ability Haste"
    ],
    "from": [
     "3802",
@@ -1447,6 +1914,11 @@ window.GAME_DATA = {
     "CooldownReduction",
     "OnHit",
     "AbilityHaste"
+   ],
+   "stats": [
+    "35 Attack Damage",
+    "500 Mana",
+    "15 Ability Haste"
    ],
    "from": [
     "3070",
@@ -1466,6 +1938,11 @@ window.GAME_DATA = {
     "SpellVamp",
     "AbilityHaste"
    ],
+   "stats": [
+    "60 Attack Damage",
+    "15 Ability Haste",
+    "40 Magic Resist"
+   ],
    "from": [
     "3155",
     "3133"
@@ -1483,6 +1960,11 @@ window.GAME_DATA = {
     "Active",
     "NonbootsMovement",
     "Tenacity"
+   ],
+   "stats": [
+    "50 Attack Damage",
+    "35 Magic Resist",
+    "10% Life Steal"
    ],
    "from": [
     "3140",
@@ -1503,6 +1985,12 @@ window.GAME_DATA = {
     "Tenacity",
     "AbilityHaste"
    ],
+   "stats": [
+    "250 Health",
+    "100% Base Mana Regen",
+    "12% Heal and Shield Power",
+    "15 Ability Haste"
+   ],
    "from": [
     "3067",
     "3114"
@@ -1520,6 +2008,12 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "25 Ability Power",
+    "200 Health",
+    "20 Ability Haste",
+    "125% Base Mana Regen"
+   ],
    "from": [
     "3067",
     "4642"
@@ -1536,6 +2030,11 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "75 Ability Power",
+    "350 Health",
+    "15 Ability Haste"
+   ],
    "from": [
     "3916",
     "1026",
@@ -1551,6 +2050,11 @@ window.GAME_DATA = {
     "Damage",
     "CriticalStrike",
     "ArmorPenetration"
+   ],
+   "stats": [
+    "35 Attack Damage",
+    "30% Armor Penetration",
+    "25% Critical Strike Chance"
    ],
    "from": [
     "3123",
@@ -1569,6 +2073,11 @@ window.GAME_DATA = {
     "OnHit",
     "AbilityHaste"
    ],
+   "stats": [
+    "80 Ability Power",
+    "50% Attack Speed",
+    "15 Ability Haste"
+   ],
    "from": [
     "1043",
     "1026",
@@ -1585,6 +2094,11 @@ window.GAME_DATA = {
     "AttackSpeed",
     "NonbootsMovement"
    ],
+   "stats": [
+    "40% Attack Speed",
+    "25% Critical Strike Chance",
+    "4% Move Speed"
+   ],
    "from": [
     "1042",
     "3086",
@@ -1600,6 +2114,10 @@ window.GAME_DATA = {
     "Health",
     "Damage"
    ],
+   "stats": [
+    "40 Attack Damage",
+    "550 Health"
+   ],
    "from": [
     "2021",
     "2021"
@@ -1614,6 +2132,11 @@ window.GAME_DATA = {
     "CriticalStrike",
     "AttackSpeed",
     "NonbootsMovement"
+   ],
+   "stats": [
+    "65% Attack Speed",
+    "25% Critical Strike Chance",
+    "10% Move Speed"
    ],
    "from": [
     "1042",
@@ -1633,6 +2156,11 @@ window.GAME_DATA = {
     "ArmorPenetration",
     "AbilityHaste"
    ],
+   "stats": [
+    "55 Attack Damage",
+    "18 Lethality",
+    "10 Ability Haste"
+   ],
    "from": [
     "3077",
     "2020"
@@ -1649,6 +2177,10 @@ window.GAME_DATA = {
     "Tenacity",
     "AbilityHaste"
    ],
+   "stats": [
+    "600 Health",
+    "20 Ability Haste"
+   ],
    "from": [
     "3067",
     "1011"
@@ -1661,6 +2193,9 @@ window.GAME_DATA = {
    "cost": 3500,
    "tags": [
     "SpellDamage"
+   ],
+   "stats": [
+    "130 Ability Power"
    ],
    "from": [
     "1058",
@@ -1678,6 +2213,10 @@ window.GAME_DATA = {
     "Active",
     "Slow"
    ],
+   "stats": [
+    "350 Health",
+    "75 Armor"
+   ],
    "from": [
     "3082",
     "1011"
@@ -1692,6 +2231,11 @@ window.GAME_DATA = {
     "CriticalStrike",
     "AttackSpeed",
     "NonbootsMovement"
+   ],
+   "stats": [
+    "35% Attack Speed",
+    "25% Critical Strike Chance",
+    "4% Move Speed"
    ],
    "from": [
     "3086",
@@ -1710,6 +2254,11 @@ window.GAME_DATA = {
     "OnHit",
     "AbilityHaste"
    ],
+   "stats": [
+    "65 Attack Damage",
+    "15 Ability Haste",
+    "12% Life Steal"
+   ],
    "from": [
     "3077",
     "1053",
@@ -1727,6 +2276,12 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "30 Ability Power",
+    "15 Ability Haste",
+    "100% Base Mana Regen",
+    "10% Heal and Shield Power"
+   ],
    "from": [
     "3108",
     "3114"
@@ -1742,6 +2297,11 @@ window.GAME_DATA = {
     "SpellDamage",
     "CooldownReduction",
     "SpellVamp"
+   ],
+   "stats": [
+    "70 Ability Power",
+    "350 Health",
+    "15 Ability Haste"
    ],
    "from": [
     "3147",
@@ -1760,6 +2320,11 @@ window.GAME_DATA = {
     "Mana",
     "ManaRegen"
    ],
+   "stats": [
+    "45 Ability Power",
+    "350 Health",
+    "500 Mana"
+   ],
    "from": [
     "1026",
     "3803"
@@ -1776,6 +2341,11 @@ window.GAME_DATA = {
     "OnHit",
     "NonbootsMovement"
    ],
+   "stats": [
+    "40% Attack Speed",
+    "25% Critical Strike Chance",
+    "5% Move Speed"
+   ],
    "from": [
     "3086",
     "3144"
@@ -1791,6 +2361,10 @@ window.GAME_DATA = {
     "SpellDamage",
     "Slow"
    ],
+   "stats": [
+    "65 Ability Power",
+    "400 Health"
+   ],
    "from": [
     "1026",
     "1011",
@@ -1805,6 +2379,10 @@ window.GAME_DATA = {
    "tags": [
     "Damage",
     "ArmorPenetration"
+   ],
+   "stats": [
+    "55 Attack Damage",
+    "15 Lethality"
    ],
    "from": [
     "3134",
@@ -1822,6 +2400,11 @@ window.GAME_DATA = {
     "ArmorPenetration",
     "AbilityHaste"
    ],
+   "stats": [
+    "45 Attack Damage",
+    "35% Armor Penetration",
+    "15 Ability Haste"
+   ],
    "from": [
     "3133",
     "3035"
@@ -1835,6 +2418,10 @@ window.GAME_DATA = {
    "tags": [
     "SpellDamage",
     "MagicPenetration"
+   ],
+   "stats": [
+    "110 Ability Power",
+    "15 Magic Penetration"
    ],
    "from": [
     "3145",
@@ -1854,6 +2441,12 @@ window.GAME_DATA = {
     "NonbootsMovement",
     "AbilityHaste"
    ],
+   "stats": [
+    "50 Ability Power",
+    "15 Ability Haste",
+    "4% Move Speed",
+    "125% Base Mana Regen"
+   ],
    "from": [
     "3113",
     "4642"
@@ -1868,6 +2461,10 @@ window.GAME_DATA = {
     "Health",
     "Damage",
     "AbilityHaste"
+   ],
+   "stats": [
+    "45 Attack Damage",
+    "450 Health"
    ],
    "from": [
     "1037",
@@ -1887,6 +2484,12 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "400 Health",
+    "50 Magic Resist",
+    "10 Ability Haste",
+    "100% Base Health Regen"
+   ],
    "from": [
     "3211",
     "3067"
@@ -1902,6 +2505,12 @@ window.GAME_DATA = {
     "ManaRegen",
     "CooldownReduction",
     "AbilityHaste"
+   ],
+   "stats": [
+    "35 Ability Power",
+    "10% Heal and Shield Power",
+    "125% Base Mana Regen",
+    "10 Ability Haste"
    ],
    "from": [
     "3108",
@@ -1920,6 +2529,12 @@ window.GAME_DATA = {
     "OnHit",
     "NonbootsMovement"
    ],
+   "stats": [
+    "45 Attack Damage",
+    "45 Ability Power",
+    "30% Attack Speed",
+    "4% Move Speed"
+   ],
    "from": [
     "3144",
     "3113",
@@ -1935,6 +2550,10 @@ window.GAME_DATA = {
     "Health",
     "Damage",
     "Tenacity"
+   ],
+   "stats": [
+    "400 Health",
+    "20% Tenacity"
    ],
    "from": [
     "1037",
@@ -1953,6 +2572,11 @@ window.GAME_DATA = {
     "AttackSpeed",
     "NonbootsMovement"
    ],
+   "stats": [
+    "50 Attack Damage",
+    "25% Attack Speed",
+    "25% Critical Strike Chance"
+   ],
    "from": [
     "1038",
     "1018",
@@ -1970,6 +2594,11 @@ window.GAME_DATA = {
     "NonbootsMovement",
     "MagicPenetration"
    ],
+   "stats": [
+    "90 Ability Power",
+    "15 Magic Penetration",
+    "6% Move Speed"
+   ],
    "from": [
     "3145",
     "3113"
@@ -1985,6 +2614,11 @@ window.GAME_DATA = {
     "Damage",
     "AttackSpeed",
     "Slow"
+   ],
+   "stats": [
+    "40 Attack Damage",
+    "25% Attack Speed",
+    "450 Health"
    ],
    "from": [
     "3077",
@@ -2003,6 +2637,11 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "40 Attack Damage",
+    "400 Health",
+    "10 Ability Haste"
+   ],
    "from": [
     "2021",
     "3133"
@@ -2018,6 +2657,11 @@ window.GAME_DATA = {
     "Armor",
     "Aura",
     "AbilityHaste"
+   ],
+   "stats": [
+    "350 Health",
+    "50 Armor",
+    "10 Ability Haste"
    ],
    "from": [
     "6660",
@@ -2037,6 +2681,10 @@ window.GAME_DATA = {
     "MagicPenetration",
     "ArmorPenetration"
    ],
+   "stats": [
+    "30 Attack Damage",
+    "35% Attack Speed"
+   ],
    "from": [
     "3051",
     "1043"
@@ -2052,6 +2700,11 @@ window.GAME_DATA = {
     "CriticalStrike",
     "ArmorPenetration"
    ],
+   "stats": [
+    "50 Attack Damage",
+    "10 Lethality",
+    "25% Critical Strike Chance"
+   ],
    "from": [
     "1037",
     "3134",
@@ -2066,6 +2719,10 @@ window.GAME_DATA = {
    "tags": [
     "Health",
     "Armor"
+   ],
+   "stats": [
+    "150 Health",
+    "75 Armor"
    ],
    "from": [
     "3076",
@@ -2083,6 +2740,10 @@ window.GAME_DATA = {
     "HealthRegen",
     "Damage",
     "OnHit"
+   ],
+   "stats": [
+    "40 Attack Damage",
+    "600 Health"
    ],
    "from": [
     "3077",
@@ -2104,6 +2765,12 @@ window.GAME_DATA = {
     "NonbootsMovement",
     "AbilityHaste"
    ],
+   "stats": [
+    "36 Attack Damage",
+    "30% Attack Speed",
+    "333 Health",
+    "15 Ability Haste"
+   ],
    "from": [
     "3057",
     "3044",
@@ -2122,6 +2789,11 @@ window.GAME_DATA = {
     "ArmorPenetration",
     "AbilityHaste"
    ],
+   "stats": [
+    "60 Attack Damage",
+    "18 Lethality",
+    "15 Ability Haste"
+   ],
    "from": [
     "3134",
     "3133"
@@ -2138,6 +2810,11 @@ window.GAME_DATA = {
     "CooldownReduction",
     "AbilityHaste"
    ],
+   "stats": [
+    "400 Health",
+    "50 Armor",
+    "15 Ability Haste"
+   ],
    "from": [
     "1031",
     "3067",
@@ -2152,6 +2829,10 @@ window.GAME_DATA = {
    "tags": [
     "MagicPenetration",
     "SpellDamage"
+   ],
+   "stats": [
+    "95 Ability Power",
+    "40% Magic Penetration"
    ],
    "from": [
     "4630",
@@ -2170,6 +2851,11 @@ window.GAME_DATA = {
     "ArmorPenetration",
     "AbilityHaste"
    ],
+   "stats": [
+    "55 Attack Damage",
+    "10 Lethality",
+    "10 Ability Haste"
+   ],
    "from": [
     "2020",
     "1036",
@@ -2184,6 +2870,10 @@ window.GAME_DATA = {
    "tags": [
     "Health",
     "HealthRegen"
+   ],
+   "stats": [
+    "1000 Health",
+    "100% Base Health Regen"
    ],
    "from": [
     "1011",
@@ -2200,6 +2890,11 @@ window.GAME_DATA = {
     "Health",
     "Mana",
     "AbilityHaste"
+   ],
+   "stats": [
+    "550 Health",
+    "500 Mana",
+    "15 Ability Haste"
    ],
    "from": [
     "3070",
@@ -2218,6 +2913,11 @@ window.GAME_DATA = {
     "OnHit",
     "Tenacity"
    ],
+   "stats": [
+    "50% Attack Speed",
+    "45 Magic Resist",
+    "20% Tenacity"
+   ],
    "from": [
     "1043",
     "1057",
@@ -2235,6 +2935,11 @@ window.GAME_DATA = {
     "NonbootsMovement",
     "ArmorPenetration"
    ],
+   "stats": [
+    "55 Attack Damage",
+    "18 Lethality",
+    "4% Move Speed"
+   ],
    "from": [
     "3134",
     "6690",
@@ -2250,6 +2955,11 @@ window.GAME_DATA = {
     "Damage",
     "CriticalStrike",
     "AttackSpeed"
+   ],
+   "stats": [
+    "50 Attack Damage",
+    "45% Attack Speed",
+    "0% Critical Strike Chance"
    ],
    "from": [
     "1038",
@@ -2268,6 +2978,12 @@ window.GAME_DATA = {
     "Armor",
     "AbilityHaste"
    ],
+   "stats": [
+    "300 Health",
+    "25 Armor",
+    "25 Magic Resist",
+    "10 Ability Haste"
+   ],
    "from": [
     "3067",
     "1029",
@@ -2283,6 +2999,10 @@ window.GAME_DATA = {
     "Armor",
     "SpellDamage",
     "Active"
+   ],
+   "stats": [
+    "105 Ability Power",
+    "50 Armor"
    ],
    "from": [
     "1058",
