@@ -537,3 +537,71 @@ button.node:hover:not(:disabled) .tile { transform: translateY(-3px); border-col
 .tree .branch { flex: none; }
 /* a single child hangs straight down from its parent */
 .branch:only-child::before { border-top: 0; border-radius: 0; }
+
+/* ---- v7: ITEMDLE wordmark, simple picker, Boris's breakdown ---- */
+.brand h1 { letter-spacing: .12em; font-weight: 750; }
+
+/* picker: picture + name only, the whole list scrolls */
+.suggest { max-height: min(52vh, 420px); overscroll-behavior: contain; }
+.opt { gap: 12px; padding: 6px 10px; }
+.opt .on { font-size: 14px; }
+
+/* Boris's breakdown */
+.fb { display: grid; gap: 8px; }
+.fb .fb-lead { margin: 0 0 2px; font-weight: 550; }
+.fb-row {
+  border-radius: 14px; padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+}
+.fb-row.ok { border-left-color: var(--good); background: rgba(62, 207, 142, 0.06); }
+.fb-row.no { border-left-color: var(--bad); }
+.fb-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.fb-k { font: 600 10px "JetBrains Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); min-width: 64px; }
+.fb-item { display: inline-flex; align-items: center; gap: 8px; }
+.fb-item .mini { width: 28px; height: 28px; border-radius: 7px; overflow: hidden; flex: none; }
+.fb-item .mini img, .fb-item .mini .ph { width: 100%; height: 100%; object-fit: cover; }
+.fb-item b { font-size: 15px; font-weight: 650; }
+.fb-v { margin-left: auto; font-size: 13px; font-weight: 600; }
+.fb-row.ok .fb-v { color: var(--good); }
+.fb-row.no .fb-v { color: var(--bad); }
+
+.fb-line { display: grid; grid-template-columns: 64px 1fr auto; align-items: center; gap: 10px; margin-top: 8px; }
+.fb-line .lbl { font: 600 10px "JetBrains Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.fb-line .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.fb-line .count { font: 600 12px "JetBrains Mono", monospace; color: var(--muted); white-space: nowrap; }
+.fb-line .count.hit { color: var(--good); }
+
+.pill {
+  padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 600;
+  border: 1px solid var(--border-strong); background: rgba(255, 255, 255, 0.04); color: #9a9aac;
+}
+.pill.hit { color: #0b2a1d; background: var(--good); border-color: var(--good); }
+.pill.miss { text-decoration: line-through; text-decoration-color: rgba(255, 255, 255, 0.35); }
+
+.rc {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px 3px 3px; border-radius: 999px; font-size: 13px; font-weight: 600;
+  border: 1px solid var(--border-strong); background: rgba(255, 255, 255, 0.04); color: #9a9aac;
+}
+.rc .mini { width: 22px; height: 22px; border-radius: 50%; overflow: hidden; flex: none; }
+.rc .mini img, .rc .mini .ph { width: 100%; height: 100%; object-fit: cover; }
+.rc.hit { color: var(--text); border-color: var(--good); background: rgba(62, 207, 142, 0.14); box-shadow: 0 0 0 1px rgba(62, 207, 142, 0.25); }
+.rc.miss { opacity: .6; }
+.rc.miss .mini { filter: grayscale(1); }
+
+.cmp { font-size: 14px; font-weight: 600; grid-column: 2 / -1; }
+.cmp b { font-size: 13px; margin-right: 2px; }
+.cmp.up b { color: var(--good); }
+.cmp.down b { color: var(--bad); }
+.cmp.same b { color: var(--muted); }
+
+@media (max-width: 600px) {
+  .fb-line { grid-template-columns: 1fr auto; }
+  .fb-line .lbl { grid-column: 1 / -1; }
+  .fb-line .pills { grid-column: 1; }
+  .cmp { grid-column: 1 / -1; }
+  .fb-v { margin-left: 0; width: 100%; }
+  .fb-k { min-width: 0; }
+}

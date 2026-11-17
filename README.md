@@ -1,6 +1,6 @@
 <img src="assets/icon.svg" width="64" height="64" alt="">
 
-# Recipe Rift
+# ITEMDLE
 
 An endless League of Legends item puzzle. Every puzzle is shown as a three-level recipe tree, like the in-game shop: the finished item on top, its major components below, and each major component's base components under that. The puzzle itself is about the major components. Three modes:
 
@@ -9,7 +9,7 @@ An endless League of Legends item puzzle. Every puzzle is shown as a three-level
 - **Missing** – one real component is hidden behind the `?` tile. Name it, then name the finished item.
 
 You get 6 attempts per puzzle. Every box shows the item's gold price and stats. After 3 guesses, a hint panel next to the finished item unlocks its gold price and full stats.
-Puzzles are generated so that exactly one answer fits the board alone (no recipe twins), and the Oracle adds hints after each guess.
+Puzzles are generated so that exactly one answer fits the board alone (no recipe twins), and Boris, the assistant, adds hints after each guess.
 Sound effects are synthesized with the Web Audio API (no audio files); the speaker button in the top bar mutes them.
 Each mode keeps its own stats in the browser: played, win rate, current and best streak, average guesses and guess distribution. Giving up counts as a loss.
 

@@ -153,7 +153,6 @@
     Slow: "Slow", Aura: "Aura", Tenacity: "Tenacity", Vision: "Vision", GoldPer: "Gold Income",
   };
   const statSet = (x) => [...new Set(x.tags.map((t) => TAG[t]).filter(Boolean))];
-  const tagsHtml = (arr) => arr.map((t) => `<span class="tag">${esc(t)}</span>`).join(" ");
 
   // ---------- icons ----------
   function icon(x, cls = "") {
@@ -442,10 +441,12 @@
   const tried = (k, x) => game.guesses.some((g) => !g.res[k] && (k === "imp" ? g.imp === x.boardIdx : g[k] === x.id));
 
   function updateSuggest() {
+    clearTimeout(blurTimer); // a pending close from an earlier blur must not hide the list we're opening
     if (game.done) return closeSuggest();
     if (!active) {
-      // Typing goes to the first open text slot (the imposter is picked by tapping).
-      const k = open().find((s) => s !== "imp" && sel[s] == null) || open().find((s) => sel[s] == null);
+      // Typing goes to the first empty slot (the imposter can also be tapped);
+      // when every slot is filled, reopen the last one so the answer can be changed.
+      const k = open().find((s) => s !== "imp" && sel[s] == null) || open().find((s) => sel[s] == null) || open().slice(-1)[0];
       if (!k) return closeSuggest();
       active = k;
       renderSlots();
@@ -456,15 +457,14 @@
       .sort((a, b) => {
         const as = a.name.toLowerCase().startsWith(term), bs = b.name.toLowerCase().startsWith(term);
         return (bs - as) || (tried(active, a) - tried(active, b)) || a.name.localeCompare(b.name);
-      })
-      .slice(0, 40);
+      });
     hl = 0;
     suggest.replaceChildren();
     if (!opts.length) suggest.append(h("div", { class: "empty" }, "No match. Try another name."));
     opts.forEach((x, i) => {
       const name = term ? esc(x.name).replace(new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "i"), "<mark>$1</mark>") : esc(x.name);
       suggest.append(h("button", { class: `opt ${i === hl ? "hl" : ""} ${tried(active, x) ? "tried" : ""}`, role: "option", onmousedown: (e) => e.preventDefault(), onclick: () => choose(x) },
-        mini(x), h("span", { class: "on" }, h("span", {}, html(name)), h("span", { class: "os" }, x.stats.map(shortStat).join(" · "))), h("span", { class: "cost" }, gold(x.cost))));
+        mini(x), h("span", { class: "on" }, html(name))));
     });
     suggest.hidden = false;
   }
@@ -487,9 +487,12 @@
 
   function closeSuggest() { suggest.hidden = true; }
 
+  let blurTimer = 0;
   q.addEventListener("focus", () => !game.done && updateSuggest());
+  // Clicking the box while it already has focus fires no focus event, so reopen on click too.
+  q.addEventListener("click", () => { if (!game.done && suggest.hidden) updateSuggest(); });
   q.addEventListener("input", updateSuggest);
-  q.addEventListener("blur", () => setTimeout(closeSuggest, 120));
+  q.addEventListener("blur", () => { clearTimeout(blurTimer); blurTimer = setTimeout(closeSuggest, 150); });
   q.addEventListener("keydown", (e) => {
     if (e.key === "ArrowDown") { e.preventDefault(); moveHl(1); }
     else if (e.key === "ArrowUp") { e.preventDefault(); moveHl(-1); }
@@ -589,10 +592,10 @@
   }
   $("#btn-giveup").addEventListener("click", giveUp);
 
-  // ---------- Oracle (assistant) ----------
+  // ---------- Boris (the assistant) ----------
   const asNode = (c) => (typeof c === "string" ? html(c) : c);
   function oracleNode(content, extra) {
-    const body = h("div", { class: "body" }, h("div", { class: "who" }, "Oracle"));
+    const body = h("div", { class: "body" }, h("div", { class: "who" }, "Boris"));
     const node = h("div", { class: "msg" }, h("span", { class: "orb sm" }), body);
     if (content != null) { body.append(asNode(content)); if (extra) body.append(extra); }
     return { node, body };
@@ -637,39 +640,69 @@
     scrollFeed();
   }
 
-  function costPhrase(guess, ans) {
-    if (ans.cost === guess.cost) return `costs the <b>same</b> (${gold(ans.cost)})`;
-    return `costs <b>${ans.cost > guess.cost ? "more" : "less"}</b> than ${esc(guess.name)} (${gold(guess.cost)})`;
+  // ---------- Boris's feedback: one row per answer, with stats and recipe overlap as visuals ----------
+  const statName = (line) => splitStat(line)[1];
+
+  // Stat pills of the guess; green when the answer has the same stat.
+  function statCompare(guess, ans) {
+    const want = new Set(ans.stats.map(statName));
+    const pills = guess.stats.map((l) => h("span", { class: `pill ${want.has(statName(l)) ? "hit" : "miss"}` }, shortStat(l)));
+    const hits = guess.stats.filter((l) => want.has(statName(l))).length;
+    return h("div", { class: "fb-line" }, h("span", { class: "lbl" }, "Stats"), h("span", { class: "pills" }, pills),
+      h("span", { class: `count ${hits ? "hit" : ""}` }, `${hits} of ${guess.stats.length} match`));
+  }
+
+  // The guess's recipe; components the answer also uses light up.
+  function recipeCompare(guess, ans) {
+    const pool = [...ans.from];
+    const parts = guess.from.map((id) => { const j = pool.indexOf(id); const hit = j >= 0; if (hit) pool.splice(j, 1); return { x: byId.get(id), hit }; });
+    const hits = parts.filter((p) => p.hit).length;
+    return h("div", { class: "fb-line" }, h("span", { class: "lbl" }, "Recipe"),
+      h("span", { class: "pills" }, parts.map(({ x, hit }) => h("span", { class: `rc ${hit ? "hit" : "miss"}`, title: x.name }, mini(x), x.name))),
+      h("span", { class: `count ${hits ? "hit" : ""}` }, `${hits} of ${parts.length} match`));
+  }
+
+  function goldCompare(guess, ans) {
+    const dir = ans.cost > guess.cost ? "up" : ans.cost < guess.cost ? "down" : "same";
+    const text = dir === "same" ? "Same price" : `Answer costs ${dir === "up" ? "more" : "less"}`;
+    return h("div", { class: "fb-line" }, h("span", { class: "lbl" }, "Gold"),
+      h("span", { class: `cmp ${dir}` }, h("b", {}, dir === "up" ? "▲" : dir === "down" ? "▼" : "="), ` ${text} than ${gold(guess.cost)}`));
+  }
+
+  function fbRow(label, x, ok, verdict, details = []) {
+    return h("div", { class: `fb-row ${ok ? "ok" : "no"}` },
+      h("div", { class: "fb-head" },
+        h("span", { class: "fb-k" }, label),
+        h("span", { class: "fb-item" }, mini(x), h("b", {}, x.name), h("span", { class: "g" }, gold(x.cost))),
+        h("span", { class: "fb-v" }, `${ok ? "✓" : "✗"} ${verdict}`)),
+      details);
   }
 
   function feedbackFor(g, n) {
+    const out = h("div", { class: "fb" });
     const lines = [];
     const first = (k) => g.res[k] && !game.guesses.slice(0, n - 1).some((p) => p.res[k]);
     const itemAns = byId.get(puzzle.itemId);
+    const rows = [];
 
-    if (uses("imp")) {
+    if (uses("imp") && (first("imp") || !g.res.imp)) {
       const imp = byId.get(puzzle.board[g.imp].id);
-      if (first("imp")) lines.push(`Good eye — <b>${esc(imp.name)}</b> is the imposter. It doesn't belong in this recipe.`);
-      else if (!g.res.imp) lines.push(`<b>${esc(imp.name)}</b> is legit — it really is part of the recipe. Look elsewhere for the imposter.`);
+      rows.push(g.res.imp ? fbRow("Imposter", imp, true, "Imposter caught") : fbRow("Imposter", imp, false, "It's part of the recipe"));
     }
-
-    if (uses("miss")) {
+    if (uses("miss") && (first("miss") || !g.res.miss)) {
       const miss = byId.get(g.miss), missAns = byId.get(puzzle.missing);
-      if (first("miss")) lines.push(`<b>${esc(miss.name)}</b> slots right in. That's the missing piece.`);
-      else if (!g.res.miss) {
-        const shared = statSet(miss).filter((s) => statSet(missAns).includes(s));
-        lines.push(`<b>${esc(miss.name)}</b> isn't missing. The missing piece ${costPhrase(miss, missAns)}${shared.length ? ` and also gives ${tagsHtml(shared)}` : " and gives different stats"}.`);
-      }
+      rows.push(g.res.miss ? fbRow("Missing", miss, true, "That's the missing piece")
+        : fbRow("Missing", miss, false, "Not the missing piece", [goldCompare(miss, missAns), statCompare(miss, missAns)]));
+    }
+    if (first("item") || !g.res.item) {
+      const item = byId.get(g.item);
+      rows.push(g.res.item ? fbRow("Item", item, true, "That's the item")
+        : fbRow("Item", item, false, "Wrong item", [statCompare(item, itemAns), recipeCompare(item, itemAns)]));
     }
 
-    const item = byId.get(g.item);
-    if (first("item")) lines.push(`Yes — it builds into <b>${esc(itemAns.name)}</b> (${gold(itemAns.cost)}).`);
-    else if (!g.res.item) {
-      const shared = statSet(item).filter((s) => statSet(itemAns).includes(s));
-      const pool = [...itemAns.from];
-      const common = item.from.filter((id) => { const j = pool.indexOf(id); return j >= 0 && pool.splice(j, 1); }).length;
-      lines.push(`Not <b>${esc(item.name)}</b> (${gold(item.cost)}). ${shared.length ? `It shares ${tagsHtml(shared)} with the answer` : "Its stats are nothing like the answer"}${common ? `, and its recipe overlaps on ${common} component${common > 1 ? "s" : ""}` : ""}.${n >= HINT_AT ? " Compare it with the hint panel." : ""}`);
-    }
+    const allRight = objectives().every((k) => g.res[k]);
+    const anyNew = objectives().some((k) => first(k));
+    out.append(h("p", { class: "fb-lead" }, allRight ? "That's everything!" : anyNew ? "Progress! Here's the breakdown:" : "Not quite. Here's what I can tell you:"), ...rows);
 
     if (n === HINT_AT && !objectives().every((k) => g.res[k])) {
       lines.push(`<span class="hint-note">🔓 Hint unlocked: I've revealed the finished item's <b>gold</b> and <b>stats</b> next to the tree.</span>`);
@@ -682,7 +715,8 @@
       if (extra.length) lines.push(`<span class="muted">Extra hint: ${extra.join(", and ")}.</span>`);
     }
     if (n === MAX_TRIES - 1 && !objectives().every((k) => g.res[k])) lines.push(`<span class="muted">Last attempt. Make it count.</span>`);
-    return lines.map((l) => `<p>${l}</p>`).join("");
+    if (lines.length) out.append(html(lines.map((l) => `<p>${l}</p>`).join("")));
+    return out;
   }
 
   function endMessage() {
@@ -715,7 +749,7 @@
     const sq = (ok) => (ok ? "🟩" : "🟥");
     const rows = game.guesses.map((g) => objectives().map((k) => sq(g.res[k])).join("")).join("\n");
     const s = statFor(mode);
-    const text = `Recipe Rift · ${MODES[mode].label} ${game.won ? game.guesses.length : "X"}/${MAX_TRIES} · streak ${s.streak}\n${objectives().map((k) => SHARE_ICON[k]).join("")}\n${rows}`;
+    const text = `ITEMDLE · ${MODES[mode].label} ${game.won ? game.guesses.length : "X"}/${MAX_TRIES} · streak ${s.streak}\n${objectives().map((k) => SHARE_ICON[k]).join("")}\n${rows}`;
     if (navigator.share && matchMedia("(pointer: coarse)").matches) navigator.share({ text }).catch(() => {});
     else navigator.clipboard?.writeText(text).then(() => toast("Copied to clipboard"), () => toast("Couldn't copy"));
   }
