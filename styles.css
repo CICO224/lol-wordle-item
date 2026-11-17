@@ -673,3 +673,10 @@ button.node:hover:not(:disabled) .tile { transform: translateY(-3px); border-col
 /* ---- v10: logo ---- */
 .logo { width: 40px; height: 40px; flex: none; filter: drop-shadow(0 0 10px rgba(79, 209, 232, 0.35)); }
 @media (max-width: 600px) { .logo { width: 34px; height: 34px; } }
+
+/* ---- v12: ads are links ---- */
+a.ad-creative { text-decoration: none; cursor: pointer; transition: transform .2s, box-shadow .2s, filter .2s; }
+a.ad-creative:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45); filter: saturate(1.15); }
+a.ad-creative:hover .ad-cta { transform: scale(1.06); }
+.ad-cta { transition: transform .2s; }
+a.ad-creative:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
