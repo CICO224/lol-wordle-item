@@ -21,8 +21,15 @@ npx serve .
 
 ## Item images
 
-Put the PNGs in `assets/items/` using the file names listed in [IMAGES.md](IMAGES.md).
-Until an image exists, the game shows a lettered placeholder tile.
+Icons live in `assets/items/` using the file names listed in [IMAGES.md](IMAGES.md).
+They are downloaded from the [League of Legends Wiki](https://wiki.leagueoflegends.com/en-us/Category:High_definition_item_icons) (HD icons, 128px):
+
+```sh
+node scripts/fetch-wiki-icons.mjs          # only downloads icons that are missing
+node scripts/fetch-wiki-icons.mjs --force  # re-download everything
+```
+
+If an icon is missing, the game shows a lettered placeholder tile.
 
 ## Updating to a new patch
 
