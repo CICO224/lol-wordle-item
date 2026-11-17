@@ -57,6 +57,78 @@
   };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+  // ---------- sound effects (synthesized with Web Audio, no files needed) ----------
+  const sfx = (() => {
+    let ctx = null, master = null, muted = store.get("rr:muted", false);
+    const ac = () => {
+      if (!ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        ctx = new AC();
+        master = ctx.createGain();
+        master.gain.value = 0.55;
+        master.connect(ctx.destination);
+      }
+      if (ctx.state === "suspended") ctx.resume();
+      return ctx;
+    };
+    // One enveloped oscillator note, optionally sliding to another pitch.
+    const tone = ({ f = 440, to, type = "sine", dur = 0.12, vol = 0.15, at = 0, attack = 0.006 }) => {
+      const c = ac(); if (!c) return;
+      const t = c.currentTime + at;
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = type;
+      o.frequency.setValueAtTime(f, t);
+      if (to) o.frequency.exponentialRampToValueAtTime(to, t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + attack);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(master);
+      o.start(t);
+      o.stop(t + dur + 0.03);
+    };
+    // Filtered noise burst, used for the "send" whoosh.
+    const whoosh = ({ dur = 0.28, vol = 0.12, from = 400, to = 2600 } = {}) => {
+      const c = ac(); if (!c) return;
+      const t = c.currentTime;
+      const buf = c.createBuffer(1, Math.floor(c.sampleRate * dur), c.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+      const src = c.createBufferSource(), bp = c.createBiquadFilter(), g = c.createGain();
+      src.buffer = buf;
+      bp.type = "bandpass"; bp.Q.value = 1.2;
+      bp.frequency.setValueAtTime(from, t);
+      bp.frequency.exponentialRampToValueAtTime(to, t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + dur * 0.3);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(bp).connect(g).connect(master);
+      src.start(t);
+    };
+    const notes = (list, opts) => list.forEach(([f, at], i) => tone({ f, at: at ?? i * 0.08, ...opts }));
+    const play = (fn) => (...a) => { if (!muted) try { fn(...a); } catch { /* audio unavailable */ } };
+    return {
+      get muted() { return muted; },
+      setMuted(v) { muted = v; store.set("rr:muted", v); },
+      click: play(() => tone({ f: 1100, type: "triangle", dur: 0.045, vol: 0.06 })),
+      select: play(() => tone({ f: 520, to: 780, type: "triangle", dur: 0.09, vol: 0.1 })),
+      pick: play(() => notes([[660], [990, 0.05]], { type: "sine", dur: 0.08, vol: 0.09 })),
+      send: play(() => whoosh()),
+      blip: play(() => tone({ f: 880, to: 1320, type: "sine", dur: 0.06, vol: 0.035 })),
+      correct: play(() => notes([[784], [1047], [1319]], { type: "triangle", dur: 0.16, vol: 0.12 })),
+      partial: play(() => notes([[660], [880]], { type: "triangle", dur: 0.14, vol: 0.1 })),
+      wrong: play(() => { tone({ f: 220, to: 130, type: "sawtooth", dur: 0.28, vol: 0.07 }); tone({ f: 110, to: 80, type: "square", dur: 0.22, vol: 0.04, at: 0.02 }); }),
+      hint: play(() => notes([[1568, 0], [2093, 0.07], [2637, 0.14], [3136, 0.21]], { type: "sine", dur: 0.22, vol: 0.06 })),
+      win: play(() => {
+        notes([[523, 0], [659, 0.1], [784, 0.2], [1047, 0.3]], { type: "triangle", dur: 0.22, vol: 0.13 });
+        notes([[1047, 0.42], [1319, 0.42], [1568, 0.42]], { type: "sine", dur: 0.7, vol: 0.07 });
+        notes([[2093, 0.5], [2637, 0.58], [3136, 0.66], [4186, 0.74]], { type: "sine", dur: 0.18, vol: 0.03 });
+      }),
+      lose: play(() => notes([[392, 0], [330, 0.18], [262, 0.36], [196, 0.54]], { type: "triangle", dur: 0.3, vol: 0.11 })),
+      mode: play(() => tone({ f: 440, to: 660, type: "sine", dur: 0.12, vol: 0.08 })),
+    };
+  })();
+
   // Seeded RNG so a saved puzzle regenerates identically after a reload.
   function rng(seed) {
     let a = seed >>> 0;
@@ -111,13 +183,11 @@
   const node = (tag, attrs, tileCls, tileKids, cap) => h(tag, { class: "node", ...attrs }, h("span", { class: `tile ${tileCls}` }, tileKids), cap);
 
   // ---------- puzzle generation ----------
-  // The hint panel shows the finished item's gold and stats, so a puzzle has a single answer
-  // when exactly one (item, missing/imposter) pair fits both the board and the hint.
-  const sig = (x) => `${x.cost}|${x.stats.join(";")}`;
+  // The hint panel stays locked for the first guesses, so a puzzle must have a single answer
+  // from the board alone: exactly one (item, missing/imposter) pair fits the shown components.
   const minus = (from, shown) => { const p = [...from]; for (const id of shown) { const j = p.indexOf(id); if (j < 0) return null; p.splice(j, 1); } return p; };
   function solutionCount(p) {
-    const target = sig(byId.get(p.itemId));
-    const pool = items.filter((x) => sig(x) === target);
+    const pool = items;
     const ids = p.board.filter((t) => t.kind !== "missing").map((t) => t.id);
     if (p.mode === "build") return pool.filter((x) => minus(x.from, ids)?.length === 0).length;
     if (p.mode === "missing") return pool.filter((x) => minus(x.from, ids)?.length === 1).length;
@@ -128,7 +198,7 @@
 
   function makePuzzle(seed, m) {
     const r = rng(seed);
-    for (let tries = 0; tries < 50; tries++) {
+    for (let tries = 0; tries < 200; tries++) {
       const p = buildPuzzle(r, seed, m);
       if (solutionCount(p) === 1) return p;
     }
@@ -168,6 +238,8 @@
   let puzzle, game, sel, active;
   const stats = store.get("rr:stats:v2", {});
   const statFor = (m) => (stats[m] ||= { played: 0, wins: 0, streak: 0, best: 0, guesses: 0, dist: [0, 0, 0, 0, 0, 0] });
+  const HINT_AT = 3;
+  const hintOpen = () => game.done || game.guesses.length >= HINT_AT;
   const objectives = () => MODES[mode].objectives;
   const uses = (k) => objectives().includes(k);
 
@@ -176,7 +248,7 @@
   }
 
   function loadGame() {
-    const saved = store.get(`rr:game:v4:${mode}`, null);
+    const saved = store.get(`rr:game:v5:${mode}`, null);
     if (saved && !saved.game.done) {
       puzzle = makePuzzle(saved.seed, mode);
       game = saved.game;
@@ -193,12 +265,13 @@
   }
 
   function nextPuzzle() {
-    store.set(`rr:game:v4:${mode}`, null);
+    sfx.mode();
+    store.set(`rr:game:v5:${mode}`, null);
     loadGame();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function save() { store.set(`rr:game:v4:${mode}`, { seed: puzzle.seed, game }); }
+  function save() { store.set(`rr:game:v5:${mode}`, { seed: puzzle.seed, game }); }
 
   // ---------- rendering ----------
   const tilesEl = $("#tiles"), finalEl = $("#final"), feed = $("#feed"), q = $("#q"), suggest = $("#suggest");
@@ -248,7 +321,7 @@
         "aria-label": `${c.name}, ${gold(c.cost)}${caught ? " (imposter)" : verified ? " (in recipe)" : ""}`,
         "aria-pressed": String(sel.imp === i),
         disabled: game.done || game.solved.imp != null || verified,
-        onclick: () => { sel.imp = sel.imp === i ? null : i; renderBoard(); renderSlots(); if (sel.imp != null) focusNext(); },
+        onclick: () => { sel.imp = sel.imp === i ? null : i; sel.imp != null ? sfx.select() : sfx.click(); renderBoard(); renderSlots(); if (sel.imp != null) focusNext(); },
       }, `${sel.imp === i && !caught ? "selected" : ""} ${caught ? "caught" : ""} ${verified ? "verified" : ""}`, icon(c), caption(c.name, gold(c.cost), c));
       branch(el, caught ? "cut" : verified ? "ok" : "");
     });
@@ -258,12 +331,24 @@
     const it = byId.get(puzzle.itemId);
     finalEl.append(found
       ? node("div", {}, "missing found pop", icon(it), caption(it.name, gold(it.cost)))
-      : node("div", {}, "missing", "?", caption("Finished item", gold(it.cost))));
-    // Side hint: the finished item's gold and full stats.
-    $("#hint").replaceChildren(
-      h("span", { class: "hint-k" }, "Hint"),
-      h("span", { class: "hint-g" }, gold(it.cost)),
-      h("ul", {}, it.stats.map((l) => { const [n, k] = splitStat(l); return h("li", {}, h("b", {}, n), " ", k); })));
+      : node("div", {}, "missing", "?", caption("Finished item", hintOpen() ? gold(it.cost) : "?g")));
+    // Side hint: the finished item's gold and full stats, locked until HINT_AT guesses.
+    const hint = $("#hint");
+    const wasOpen = hint.classList.contains("open");
+    if (hintOpen()) {
+      hint.className = `hint open ${wasOpen ? "" : "unlock"}`;
+      hint.replaceChildren(
+        h("span", { class: "hint-k" }, "Hint"),
+        h("span", { class: "hint-g" }, gold(it.cost)),
+        h("ul", {}, it.stats.map((l) => { const [n, k] = splitStat(l); return h("li", {}, h("b", {}, n), " ", k); })));
+    } else {
+      const n = game.guesses.length;
+      hint.className = "hint locked";
+      hint.replaceChildren(
+        h("span", { class: "hint-k" }, "🔒 Hint locked"),
+        h("span", { class: "hint-msg" }, `Gold & stats unlock after ${HINT_AT} guesses`),
+        h("span", { class: "hint-prog" }, Array.from({ length: HINT_AT }, (_, i) => h("i", { class: i < n ? "on" : "" }))));
+    }
     $("#tree").classList.toggle("solved", !!found);
 
     document.querySelectorAll("#objectives li").forEach((li) => li.classList.toggle("done", game.solved[li.dataset.obj] != null));
@@ -366,6 +451,7 @@
   function choose(x) {
     if (active === "imp") sel.imp = x.boardIdx;
     else sel[active] = x.id;
+    sfx.pick();
     q.value = "";
     renderBoard();
     focusNext();
@@ -393,6 +479,7 @@
   document.querySelectorAll(".slot").forEach((b) => b.addEventListener("click", () => {
     const k = b.dataset.slot;
     if (game.solved[k] != null) return;
+    sfx.click();
     if (active === k && sel[k] != null) { sel[k] = null; renderBoard(); }
     setActive(k);
   }));
@@ -412,6 +499,7 @@
   async function submit() {
     if (busy || game.done || $("#send").disabled) return;
     busy = true;
+    sfx.send();
     const g = {};
     for (const k of objectives()) g[k] = sel[k];
     g.res = evaluate(g);
@@ -433,9 +521,18 @@
     if (objectives().every((k) => !g.res[k])) { $("#composer").classList.add("shake"); setTimeout(() => $("#composer").classList.remove("shake"), 450); }
 
     await oracle(feedbackFor(g, game.guesses.length));
+    const n = game.guesses.length;
+    const newlySolved = objectives().filter((k) => g.res[k] && !game.guesses.slice(0, n - 1).some((p) => p.res[k]));
+    if (!game.done) {
+      if (newlySolved.length) sfx.correct(); else sfx.wrong();
+    }
     renderBoard();
-    if (game.done) { renderMiniStats(); await oracle(endMessage(), endActions()); }
-    else focusNext();
+    if (n === HINT_AT && !game.done) setTimeout(sfx.hint, 380);
+    if (game.done) {
+      renderMiniStats();
+      game.won ? sfx.win() : sfx.lose();
+      await oracle(endMessage(), endActions());
+    } else focusNext();
     busy = false;
   }
 
@@ -454,6 +551,7 @@
     if (!confirm("Give up this puzzle? It counts as a loss and resets your streak.")) return;
     busy = true;
     game.gaveUp = true;
+    sfx.lose();
     finish(false);
     save();
     closeSuggest();
@@ -484,6 +582,7 @@
     await wait(550 + Math.random() * 350);
     orb.classList.remove("thinking");
     dots.remove();
+    sfx.blip();
     body.append(asNode(content));
     if (extra) body.append(extra);
     scrollFeed();
@@ -541,10 +640,13 @@
       const shared = statSet(item).filter((s) => statSet(itemAns).includes(s));
       const pool = [...itemAns.from];
       const common = item.from.filter((id) => { const j = pool.indexOf(id); return j >= 0 && pool.splice(j, 1); }).length;
-      lines.push(`Not <b>${esc(item.name)}</b> (${gold(item.cost)}). ${shared.length ? `It shares ${tagsHtml(shared)} with the answer` : "Its stats are nothing like the answer"}${common ? `, and its recipe overlaps on ${common} component${common > 1 ? "s" : ""}` : ""}. Compare it with the hint panel.`);
+      lines.push(`Not <b>${esc(item.name)}</b> (${gold(item.cost)}). ${shared.length ? `It shares ${tagsHtml(shared)} with the answer` : "Its stats are nothing like the answer"}${common ? `, and its recipe overlaps on ${common} component${common > 1 ? "s" : ""}` : ""}.${n >= HINT_AT ? " Compare it with the hint panel." : ""}`);
     }
 
-    if (n === 3) {
+    if (n === HINT_AT && !objectives().every((k) => g.res[k])) {
+      lines.push(`<span class="hint-note">🔓 Hint unlocked: I've revealed the finished item's <b>gold</b> and <b>stats</b> next to the tree.</span>`);
+    }
+    if (n === HINT_AT + 1) {
       const extra = [];
       if (uses("miss") && !g.res.miss) extra.push(`the missing component costs <b>${gold(byId.get(puzzle.missing).cost)}</b>`);
       if (uses("imp") && !g.res.imp) extra.push(`the imposter's name starts with <b>${esc(byId.get(puzzle.imposter).name[0])}</b>`);
@@ -641,6 +743,7 @@
   function switchMode(m) {
     if (m === mode || busy) return;
     mode = m;
+    sfx.mode();
     store.set("rr:mode", m);
     closeSuggest();
     q.value = "";
@@ -649,8 +752,16 @@
   }
 
   document.querySelectorAll(".topbar .seg button").forEach((b) => b.addEventListener("click", () => switchMode(b.dataset.mode)));
-  $("#btn-help").addEventListener("click", () => $("#dlg-help").showModal());
-  $("#btn-stats").addEventListener("click", openStats);
+  $("#btn-help").addEventListener("click", () => { sfx.click(); $("#dlg-help").showModal(); });
+  $("#btn-stats").addEventListener("click", () => { sfx.click(); openStats(); });
+  const muteBtn = $("#btn-sound");
+  const renderMute = () => {
+    muteBtn.classList.toggle("off", sfx.muted);
+    muteBtn.setAttribute("aria-pressed", String(!sfx.muted));
+    muteBtn.title = sfx.muted ? "Sound off" : "Sound on";
+  };
+  muteBtn.addEventListener("click", () => { sfx.setMuted(!sfx.muted); renderMute(); sfx.click(); });
+  renderMute();
   document.querySelectorAll("dialog").forEach((d) => d.addEventListener("click", (e) => { if (e.target === d) d.close(); }));
 
   loadGame();

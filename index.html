@@ -30,6 +30,10 @@
     </div>
 
     <div class="actions">
+      <button class="icon-btn" id="btn-sound" aria-label="Sound" aria-pressed="true" title="Sound on">
+        <svg class="on" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9.5a3.5 3.5 0 0 1 0 5M18.5 7a7 7 0 0 1 0 10"/></svg>
+        <svg class="off" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 10l4 4M21 10l-4 4"/></svg>
+      </button>
       <button class="icon-btn" id="btn-help" aria-label="How to play" title="How to play">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg>
       </button>
@@ -95,7 +99,7 @@
         <li><span class="badge bad">I</span><span><b>Imposter</b>: one extra component doesn't belong. Tap it, then name the finished item.</span></li>
         <li><span class="badge q">M</span><span><b>Missing</b>: one component is hidden behind the <b>?</b> tile. Name it, then name the finished item.</span></li>
       </ul>
-      <p>You get <b>6 attempts</b>. Correct answers lock in. Every item shows its gold price, and the Oracle tells you whether the answer costs more or less than your guess.</p>
+      <p>You get <b>6 attempts</b>. Correct answers lock in, and every puzzle has exactly one answer. Every component shows its gold price and stats. After <b>3 guesses</b>, the hint panel unlocks the finished item's gold and stats.</p>
       <p class="muted">Each mode keeps its own stats and streak. Giving up counts as a loss.</p>
       <button class="btn primary" value="close">Got it</button>
     </form>
