@@ -1,5 +1,3 @@
-<img src="assets/icon.svg" width="64" height="64" alt="">
-
 # ITEMDLE
 
 An endless League of Legends item puzzle. Every puzzle is shown as a three-level recipe tree, like the in-game shop: the finished item on top, its major components below, and each major component's base components under that. The puzzle itself is about the major components. Three modes:
