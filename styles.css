@@ -270,7 +270,7 @@ button.tile:hover:not(:disabled) { transform: translateY(-3px); border-color: rg
 .opt .cost { margin-left: auto; font: 500 12px "JetBrains Mono", monospace; color: var(--gold); }
 .opt.hl, .opt:hover { background: var(--surface-2); }
 .opt.tried { opacity: .38; text-decoration: line-through; }
-.opt mark { background: none; color: var(--cyan); font-weight: 600; }
+.opt mark { background: none; color: inherit; font-weight: 750; }
 .suggest .empty { padding: 12px; color: var(--muted); font-size: 13px; }
 
 /* Modals */
@@ -605,3 +605,9 @@ button.node:hover:not(:disabled) .tile { transform: translateY(-3px); border-col
   .fb-v { margin-left: 0; width: 100%; }
   .fb-k { min-width: 0; }
 }
+
+/* ---- v8: every major component sits on the same level ---- */
+.tree .branch { justify-content: flex-start; }
+.tree .branch > .node { justify-content: flex-start; }
+/* picker name is one line of text, with the matched part in bold */
+.opt .on { display: block; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

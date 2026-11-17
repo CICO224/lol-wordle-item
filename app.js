@@ -298,11 +298,16 @@
     $("#btn-giveup").hidden = game.done;
   }
 
-  // Wide trees (up to ~10 base components) are scaled down to fit narrow screens.
+  // Keeps every major component on one level (so their base rows line up too),
+  // and scales wide trees (up to ~10 base components) down to fit narrow screens.
   function fitTree() {
     const wrap = $("#tree-wrap"), tree = $("#tree");
     tree.style.transform = "";
     wrap.style.height = "";
+    const majors = [...document.querySelectorAll("#tiles > .branch > .node")];
+    majors.forEach((n) => (n.style.minHeight = ""));
+    const tallest = Math.max(0, ...majors.map((n) => n.offsetHeight));
+    majors.forEach((n) => (n.style.minHeight = `${tallest}px`));
     const need = Math.max($("#tiles").offsetWidth, $(".tree-top", tree).scrollWidth), have = wrap.clientWidth;
     if (need > have && have > 0) {
       const k = Math.max(0.55, have / need);
