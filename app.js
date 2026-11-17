@@ -196,8 +196,14 @@
     return n;
   }
 
-  function makePuzzle(seed, m) {
+  // `avoid` holds recently seen finished items; they are skipped unless nothing else fits.
+  function makePuzzle(seed, m, avoid = new Set()) {
     const r = rng(seed);
+    for (let tries = 0; tries < 400; tries++) {
+      const p = buildPuzzle(r, seed, m);
+      if (avoid.has(p.itemId)) continue;
+      if (solutionCount(p) === 1) return p;
+    }
     for (let tries = 0; tries < 200; tries++) {
       const p = buildPuzzle(r, seed, m);
       if (solutionCount(p) === 1) return p;
@@ -247,13 +253,33 @@
     return { guesses: [], solved: { imp: null, miss: null, item: null }, verified: [], done: false, won: false, gaveUp: false };
   }
 
+  // An item that came up can't come up again until RECENT_LIMIT other puzzles have
+  // been played (shared across all modes).
+  const RECENT_LIMIT = 10;
+  const SAVE_KEY = () => `rr:game:v6:${mode}`;
+
+  function rememberItem(id) {
+    const recent = store.get("rr:recent", []).filter((x) => x !== id);
+    recent.push(id);
+    store.set("rr:recent", recent.slice(-RECENT_LIMIT));
+  }
+
   function loadGame() {
-    const saved = store.get(`rr:game:v5:${mode}`, null);
-    if (saved && !saved.game.done) {
-      puzzle = makePuzzle(saved.seed, mode);
+    // The puzzle itself is saved (not just its seed) so it can't change after a reload.
+    const saved = store.get(SAVE_KEY(), null);
+    const legacy = !saved && store.get(`rr:game:v5:${mode}`, null);
+    if (saved && saved.puzzle && !saved.game.done) {
+      puzzle = saved.puzzle;
       game = saved.game;
+    } else if (legacy && !legacy.game.done) {
+      puzzle = makePuzzle(legacy.seed, mode); // older saves only stored the seed
+      game = legacy.game;
+      store.set(`rr:game:v5:${mode}`, null);
+      rememberItem(puzzle.itemId);
+      save();
     } else {
-      puzzle = makePuzzle((Math.random() * 2 ** 32) >>> 0, mode);
+      puzzle = makePuzzle((Math.random() * 2 ** 32) >>> 0, mode, new Set(store.get("rr:recent", [])));
+      rememberItem(puzzle.itemId);
       game = freshGame();
       save();
     }
@@ -266,12 +292,12 @@
 
   function nextPuzzle() {
     sfx.mode();
-    store.set(`rr:game:v5:${mode}`, null);
+    store.set(SAVE_KEY(), null);
     loadGame();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function save() { store.set(`rr:game:v5:${mode}`, { seed: puzzle.seed, game }); }
+  function save() { store.set(SAVE_KEY(), { puzzle, game }); }
 
   // ---------- rendering ----------
   const tilesEl = $("#tiles"), finalEl = $("#final"), feed = $("#feed"), q = $("#q"), suggest = $("#suggest");

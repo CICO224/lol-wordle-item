@@ -669,3 +669,7 @@ button.node:hover:not(:disabled) .tile { transform: translateY(-3px); border-col
 @media (min-width: 1180px) {
   .ad-slot { display: flex; }
 }
+
+/* ---- v10: logo ---- */
+.logo { width: 40px; height: 40px; flex: none; filter: drop-shadow(0 0 10px rgba(79, 209, 232, 0.35)); }
+@media (max-width: 600px) { .logo { width: 34px; height: 34px; } }
