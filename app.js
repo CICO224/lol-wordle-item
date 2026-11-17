@@ -195,23 +195,34 @@
     return n;
   }
 
-  // `avoid` holds recently seen finished items; they are skipped unless nothing else fits.
-  function makePuzzle(seed, m, avoid = new Set()) {
+  // Picks a random item this mode hasn't shown yet (`seen`) and builds a single-answer
+  // puzzle for it. Once every item that can make a valid puzzle has been seen, a new
+  // round starts: `newRound` is true and the caller resets the seen list.
+  function makePuzzle(seed, m, seen = new Set()) {
     const r = rng(seed);
-    for (let tries = 0; tries < 400; tries++) {
-      const p = buildPuzzle(r, seed, m);
-      if (avoid.has(p.itemId)) continue;
-      if (solutionCount(p) === 1) return p;
+    const order = (list) => list.map((x) => [r(), x]).sort((a, b) => a[0] - b[0]).map(([, x]) => x);
+    for (const item of order(items.filter((x) => !seen.has(x.id)))) {
+      const p = puzzleForItem(r, seed, m, item);
+      if (p) return { puzzle: p, newRound: false };
     }
-    for (let tries = 0; tries < 200; tries++) {
-      const p = buildPuzzle(r, seed, m);
-      if (solutionCount(p) === 1) return p;
+    for (const item of order(items)) {
+      const p = puzzleForItem(r, seed, m, item);
+      if (p) return { puzzle: p, newRound: true };
     }
-    return buildPuzzle(r, seed, m);
+    return { puzzle: buildPuzzle(r, seed, m, items[0]), newRound: true };
   }
 
-  function buildPuzzle(r, seed, m) {
-    const item = items[Math.floor(r() * items.length)];
+  // A few attempts (different missing slot / imposter) at a single-answer puzzle for one item.
+  function puzzleForItem(r, seed, m, item) {
+    for (let tries = 0; tries < 12; tries++) {
+      const p = buildPuzzle(r, seed, m, item);
+      if (solutionCount(p) === 1) return p;
+      if (m === "build") return null; // a build puzzle for an item is always the same
+    }
+    return null;
+  }
+
+  function buildPuzzle(r, seed, m, item) {
     const recipe = item.from;
     const p = { seed, mode: m, itemId: item.id, recipe, missing: null, imposter: null };
 
@@ -255,33 +266,22 @@
     return { guesses: [], solved: { imp: null, miss: null, item: null }, verified: [], done: false, won: false, gaveUp: false };
   }
 
-  // An item that came up can't come up again until RECENT_LIMIT other puzzles have
-  // been played (shared across all modes).
-  const RECENT_LIMIT = 10;
+  // No item repeats in a mode until every item that mode can show has come up once.
   const SAVE_KEY = () => `rr:game:v6:${mode}`;
-
-  function rememberItem(id) {
-    const recent = store.get("rr:recent", []).filter((x) => x !== id);
-    recent.push(id);
-    store.set("rr:recent", recent.slice(-RECENT_LIMIT));
-  }
+  const SEEN_KEY = () => `rr:seen:${mode}`;
 
   function loadGame() {
     // The puzzle itself is saved (not just its seed) so it can't change after a reload.
     const saved = store.get(SAVE_KEY(), null);
-    const legacy = !saved && store.get(`rr:game:v5:${mode}`, null);
     if (saved && saved.puzzle && !saved.game.done) {
       puzzle = saved.puzzle;
       game = saved.game;
-    } else if (legacy && !legacy.game.done) {
-      puzzle = makePuzzle(legacy.seed, mode); // older saves only stored the seed
-      game = legacy.game;
-      store.set(`rr:game:v5:${mode}`, null);
-      rememberItem(puzzle.itemId);
-      save();
     } else {
-      puzzle = makePuzzle((Math.random() * 2 ** 32) >>> 0, mode, new Set(store.get("rr:recent", [])));
-      rememberItem(puzzle.itemId);
+      const seen = store.get(SEEN_KEY(), []);
+      const made = makePuzzle((Math.random() * 2 ** 32) >>> 0, mode, new Set(seen));
+      puzzle = made.puzzle;
+      store.set(SEEN_KEY(), [...(made.newRound ? [] : seen), puzzle.itemId]);
+      if (made.newRound && seen.length) setTimeout(() => toast(`You've seen every ${MODES[mode].label} item! Starting a new round.`), 300);
       game = freshGame();
       save();
     }
@@ -645,6 +645,7 @@
     delete stats[mode];
     store.set("rr:stats:v2", stats);
     store.set(SAVE_KEY(), null);
+    store.set(SEEN_KEY(), []); // start a fresh round of items too
     closeSuggest();
     q.value = "";
     loadGame();
@@ -894,9 +895,15 @@
     const first = { art: $(".ad-art", link).textContent, text: $(".ad-text", link).textContent, cta: $(".ad-cta", link).textContent, theme: link.classList.contains("alt") ? "alt" : "" };
     const playlist = [first, GOAT_AD];
     let at = 0, swapping = false;
+    // ⓘ shows a little note on the ad; click it again (or anywhere else) to hide it.
+    const info = $(".ad-info", frame), note = $(".ad-note", frame);
+    const showNote = (show) => { note.hidden = !show; info.setAttribute("aria-expanded", String(show)); };
+    info.addEventListener("click", (e) => { e.stopPropagation(); sfx.click(); showNote(note.hidden); });
+    document.addEventListener("click", (e) => { if (!note.hidden && !note.contains(e.target)) showNote(false); });
     $(".ad-close", frame).addEventListener("click", async () => {
       if (swapping) return;
       swapping = true;
+      showNote(false);
       sfx.select();
       link.classList.add("swap-out");
       await wait(220);
