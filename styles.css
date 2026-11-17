@@ -611,3 +611,61 @@ button.node:hover:not(:disabled) .tile { transform: translateY(-3px); border-col
 .tree .branch > .node { justify-content: flex-start; }
 /* picker name is one line of text, with the matched part in bold */
 .opt .on { display: block; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---- v9: tree lines stop short of the boxes ---- */
+/* Each line ends GAP px before the box it points at and starts GAP px below the one above. */
+.tree { --gap: 6px; }
+.tree .branch.major, .tree .branch.leaf { padding-top: calc(var(--stem) + var(--gap)); }
+.tree-top { margin-bottom: 14px; }
+.branches::before { top: -10px; height: 10px; }
+.branch > .branches.sub { margin-top: 14px; }
+.branch > .branches.sub::before { top: -10px; height: 10px; }
+
+/* ---- v9: ad slots (fake ads, 160x600 skyscrapers on wide screens) ---- */
+.ad-slot {
+  position: fixed; top: 96px; z-index: 5;
+  width: 160px; display: none;
+  flex-direction: column; gap: 4px;
+}
+.ad-left { left: max(16px, calc(50% - 380px - 160px - 40px)); }
+.ad-right { right: max(16px, calc(50% - 380px - 160px - 40px)); }
+.ad-label { font: 500 9px "JetBrains Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-align: center; }
+.ad-creative {
+  position: relative; overflow: hidden;
+  height: 600px; max-height: calc(100dvh - 260px); min-height: 300px;
+  border-radius: 10px; border: 1px solid var(--border-strong);
+  background:
+    radial-gradient(120px 120px at 30% 20%, rgba(255, 214, 102, 0.35), transparent 70%),
+    linear-gradient(170deg, #ff7eb3 0%, #ff758c 35%, #7b5cff 100%);
+  color: #fff;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  padding: 24px 14px; text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.ad-creative.alt {
+  background:
+    radial-gradient(120px 120px at 70% 80%, rgba(102, 255, 214, 0.3), transparent 70%),
+    linear-gradient(190deg, #43e97b 0%, #38f9d7 40%, #3b82f6 100%);
+}
+.ad-badge {
+  position: absolute; top: 6px; left: 6px;
+  padding: 1px 5px; border-radius: 3px;
+  background: #f5c518; color: #1a1a1a; font: 700 10px Inter, sans-serif;
+}
+.ad-x { position: absolute; top: 5px; right: 7px; font-size: 11px; opacity: .8; }
+.ad-art { font-size: 64px; line-height: 1; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25)); animation: wobble 3s ease-in-out infinite; }
+@keyframes wobble { 50% { transform: rotate(-8deg) scale(1.06); } }
+.ad-text {
+  margin: 0; font-size: 26px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25); text-transform: uppercase;
+}
+.ad-cta {
+  padding: 8px 16px; border-radius: 999px;
+  background: #fff; color: #1a1a1a; font-weight: 700; font-size: 13px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* only show the side ads when there's room next to the 760px game column */
+@media (min-width: 1180px) {
+  .ad-slot { display: flex; }
+}
