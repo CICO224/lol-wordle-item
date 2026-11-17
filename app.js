@@ -198,9 +198,11 @@
   // Picks a random item this mode hasn't shown yet (`seen`) and builds a single-answer
   // puzzle for it. Once every item that can make a valid puzzle has been seen, a new
   // round starts: `newRound` is true and the caller resets the seen list.
+  const shuffled = (list, r) => list.map((x) => [r(), x]).sort((a, b) => a[0] - b[0]).map(([, x]) => x);
+
   function makePuzzle(seed, m, seen = new Set()) {
     const r = rng(seed);
-    const order = (list) => list.map((x) => [r(), x]).sort((a, b) => a[0] - b[0]).map(([, x]) => x);
+    const order = (list) => shuffled(list, r);
     for (const item of order(items.filter((x) => !seen.has(x.id)))) {
       const p = puzzleForItem(r, seed, m, item);
       if (p) return { puzzle: p, newRound: false };
@@ -212,17 +214,47 @@
     return { puzzle: buildPuzzle(r, seed, m, items[0]), newRound: true };
   }
 
-  // A few attempts (different missing slot / imposter) at a single-answer puzzle for one item.
+  // A single-answer puzzle for one item, or null if the item can't make one in this mode.
+  // Missing mode tries every slot (in random order); imposter mode tries a few imposters.
   function puzzleForItem(r, seed, m, item) {
+    if (m === "build") { const p = buildPuzzle(r, seed, m, item); return solutionCount(p) === 1 ? p : null; }
+    if (m === "missing") {
+      for (const idx of shuffled(item.from.map((_, i) => i), r)) {
+        const p = buildPuzzle(r, seed, m, item, idx);
+        if (solutionCount(p) === 1) return p;
+      }
+      return null;
+    }
     for (let tries = 0; tries < 12; tries++) {
       const p = buildPuzzle(r, seed, m, item);
       if (solutionCount(p) === 1) return p;
-      if (m === "build") return null; // a build puzzle for an item is always the same
     }
     return null;
   }
 
-  function buildPuzzle(r, seed, m, item) {
+  // ---------- daily puzzles: the same for everyone, built from the date ----------
+  // Day 0 is launch day. Each mode walks through a fixed shuffled order of every item it can
+  // use, one per day, so no daily repeats an item until all of them have had a day.
+  const LAUNCH = Date.UTC(2026, 10, 18);
+  const todayIndex = () => { const d = new Date(); return Math.max(0, Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - LAUNCH) / 864e5)); };
+  const hashStr = (s) => { let x = 2166136261; for (const ch of s) x = Math.imul(x ^ ch.charCodeAt(0), 16777619); return x >>> 0; };
+  const dailyPools = {};
+  function dailyPool(m) {
+    // Items that can make a single-answer puzzle in this mode (imposter mode: nearly all).
+    return (dailyPools[m] ||= items.filter((it) => puzzleForItem(rng(hashStr(`pool-${m}-${it.id}`)), 0, m, it)));
+  }
+  function dailyPuzzle(m, day) {
+    const pool = dailyPool(m), n = pool.length;
+    const order = shuffled(pool, rng(hashStr(`itemdle-cycle-${m}-${Math.floor(day / n)}`)));
+    const seed = hashStr(`itemdle-daily-${m}-${day}`);
+    for (let k = 0; k < n; k++) {
+      const p = puzzleForItem(rng(seed + k), seed, m, order[(day + k) % n]);
+      if (p) return p;
+    }
+    return makePuzzle(seed, m).puzzle;
+  }
+
+  function buildPuzzle(r, seed, m, item, forcedMissing = null) {
     const recipe = item.from;
     const p = { seed, mode: m, itemId: item.id, recipe, missing: null, imposter: null };
 
@@ -230,7 +262,7 @@
     if (m === "build") {
       p.board = recipe.map((id) => ({ kind: "real", id }));
     } else if (m === "missing") {
-      const missingIdx = Math.floor(r() * recipe.length);
+      const missingIdx = forcedMissing ?? Math.floor(r() * recipe.length);
       p.missing = recipe[missingIdx];
       // The "?" sits exactly where the missing component belongs.
       p.board = recipe.map((id, i) => (i === missingIdx ? { kind: "missing" } : { kind: "real", id }));
@@ -254,9 +286,16 @@
   // ---------- state ----------
   let mode = store.get("rr:mode", "imposter");
   if (!MODES[mode]) mode = "imposter";
-  let puzzle, game, sel, active;
+  // "daily" = one puzzle per mode per day, same for everyone; "endless" = random, no repeats per round.
+  let play = store.get("rr:play", "daily");
+  if (play !== "daily" && play !== "endless") play = "daily";
+  const isDaily = () => play === "daily";
+  let puzzle, game, sel, active, day = todayIndex();
   const stats = store.get("rr:stats:v2", {});
+  // Endless stats keep their old keys ("imposter"…); daily stats live under "daily-imposter"….
+  const statKey = (m = mode, p = play) => (p === "daily" ? `daily-${m}` : m);
   const statFor = (m) => (stats[m] ||= { played: 0, wins: 0, streak: 0, best: 0, guesses: 0, dist: [0, 0, 0, 0, 0, 0] });
+  const curStats = () => statFor(statKey());
   const HINT_AT = 3;
   const hintOpen = () => game.done || game.guesses.length >= HINT_AT;
   const objectives = () => MODES[mode].objectives;
@@ -267,10 +306,22 @@
   }
 
   // No item repeats in a mode until every item that mode can show has come up once.
-  const SAVE_KEY = () => `rr:game:v6:${mode}`;
+  const SAVE_KEY = () => (isDaily() ? `rr:daily:v1:${mode}` : `rr:game:v6:${mode}`);
   const SEEN_KEY = () => `rr:seen:${mode}`;
+  const dailyDone = (m) => { const s = store.get(`rr:daily:v1:${m}`, null); return !!(s && s.day === day && s.game.done); };
 
   function loadGame() {
+    day = todayIndex();
+    if (isDaily()) {
+      // Today's daily (finished or not) stays on screen until tomorrow.
+      const saved = store.get(SAVE_KEY(), null);
+      if (saved && saved.day === day && saved.puzzle) { puzzle = saved.puzzle; game = saved.game; }
+      else { puzzle = dailyPuzzle(mode, day); game = freshGame(); save(); }
+      // A daily streak only survives if yesterday's daily was won.
+      const s = curStats();
+      if (s.streak && s.lastWinDay != null && s.lastWinDay < day - 1) { s.streak = 0; store.set("rr:stats:v2", stats); }
+      return showGame();
+    }
     // The puzzle itself is saved (not just its seed) so it can't change after a reload.
     const saved = store.get(SAVE_KEY(), null);
     if (saved && saved.puzzle && !saved.game.done) {
@@ -285,6 +336,10 @@
       game = freshGame();
       save();
     }
+    showGame();
+  }
+
+  function showGame() {
     sel = { imp: null, miss: null, item: null };
     active = null;
     for (const k of objectives()) if (game.solved[k] != null) sel[k] = game.solved[k];
@@ -299,14 +354,15 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function save() { store.set(SAVE_KEY(), { puzzle, game }); }
+  function save() { store.set(SAVE_KEY(), isDaily() ? { day, puzzle, game } : { puzzle, game }); }
 
   // ---------- rendering ----------
   const tilesEl = $("#tiles"), finalEl = $("#final"), feed = $("#feed"), q = $("#q"), suggest = $("#suggest");
 
   function renderAll() {
     $("#patch").textContent = `Patch ${version} · ${items.length} items`;
-    document.querySelectorAll(".topbar .seg button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.mode === mode)));
+    document.querySelectorAll("#play-seg button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.play === play)));
+    renderCountdown();
     $("#objectives").replaceChildren(...objectives().map((k) => h("li", { "data-obj": k }, h("span", { class: "dot" }), html(OBJ_TEXT[k]))));
     document.querySelectorAll(".slot").forEach((b) => (b.hidden = !uses(b.dataset.slot)));
     renderBoard();
@@ -316,9 +372,14 @@
   }
 
   function renderMiniStats() {
-    const s = statFor(mode);
+    const s = curStats();
     const pct = s.played ? Math.round((s.wins / s.played) * 100) : 0;
-    $("#puzzle-label").textContent = `${MODES[mode].label} · #${s.played + (game.done ? 0 : 1)}`;
+    $("#puzzle-label").textContent = isDaily() ? `Daily #${day + 1} · ${MODES[mode].label}` : `${MODES[mode].label} · #${s.played + (game.done ? 0 : 1)}`;
+    $("#btn-reset-mode").hidden = isDaily(); // a daily can't be re-rolled
+    document.querySelectorAll(".topbar .seg button").forEach((b) => {
+      b.setAttribute("aria-selected", String(b.dataset.mode === mode));
+      b.classList.toggle("done", isDaily() && dailyDone(b.dataset.mode)); // ✓ on today's finished dailies
+    });
     $("#mini-stats").replaceChildren(
       h("span", {}, "Streak ", h("b", {}, String(s.streak))),
       h("span", {}, "Best ", h("b", {}, String(s.best))),
@@ -615,10 +676,15 @@
   function finish(won) {
     game.done = true;
     game.won = won;
-    const s = statFor(mode);
+    const s = curStats();
     s.played++;
-    if (won) { s.wins++; s.streak++; s.best = Math.max(s.best, s.streak); s.dist[game.guesses.length - 1]++; s.guesses += game.guesses.length; }
-    else s.streak = 0;
+    if (won) {
+      s.wins++;
+      // Daily streak = days in a row won; endless streak = puzzles in a row won.
+      s.streak = isDaily() ? (s.lastWinDay === day - 1 ? s.streak + 1 : 1) : s.streak + 1;
+      if (isDaily()) s.lastWinDay = day;
+      s.best = Math.max(s.best, s.streak); s.dist[game.guesses.length - 1]++; s.guesses += game.guesses.length;
+    } else s.streak = 0;
     store.set("rr:stats:v2", stats);
   }
 
@@ -639,7 +705,7 @@
 
   // Start the current mode over: clears its stats, streak and puzzle. Not counted as a loss.
   function resetMode() {
-    if (busy) return;
+    if (busy || isDaily()) return;
     if (!confirm(`Reset ${MODES[mode].label} mode? This clears its stats, streak and current puzzle.`)) return;
     sfx.mode();
     delete stats[mode];
@@ -784,7 +850,7 @@
   function endMessage() {
     const it = byId.get(puzzle.itemId);
     const recipe = it.from.map((id) => byId.get(id));
-    const s = statFor(mode);
+    const s = curStats();
     const head = game.won
       ? `<p><b>Solved in ${game.guesses.length}/${MAX_TRIES}.</b> ${["Flawless.", "Impressive.", "Clean.", "Nice work.", "Got there.", "Clutch."][game.guesses.length - 1]} Streak: <b>${s.streak}</b>.</p>`
       : `<p><b>${game.gaveUp ? "You gave up." : "Out of attempts."}</b> Here's the real recipe:</p>`;
@@ -796,11 +862,19 @@
     frag.append(box);
     const notes = [];
     if (puzzle.imposter) notes.push(`The imposter was <b>${esc(byId.get(puzzle.imposter).name)}</b> (${gold(byId.get(puzzle.imposter).cost)}).`);
+    if (isDaily()) notes.push(`Come back tomorrow for Daily #${day + 2}.`);
     if (notes.length) frag.append(html(`<p class="muted">${notes.join(" ")}</p>`));
     return frag;
   }
 
   function endActions() {
+    if (isDaily()) {
+      const left = Object.keys(MODES).filter((m) => m !== mode && !dailyDone(m));
+      return h("div", { class: "btn-row" },
+        h("button", { class: "btn primary", onclick: share }, "Share result"),
+        left.map((m) => h("button", { class: "btn", onclick: () => switchMode(m) }, `${MODES[m].label} daily`)),
+        h("button", { class: "btn", onclick: () => switchPlay("endless") }, "Play Endless"));
+    }
     return h("div", { class: "btn-row" },
       h("button", { class: "btn primary", onclick: nextPuzzle }, "Next puzzle"),
       h("button", { class: "btn", onclick: share }, "Share result"),
@@ -810,25 +884,28 @@
   function share() {
     const sq = (ok) => (ok ? "🟩" : "🟥");
     const rows = game.guesses.map((g) => objectives().map((k) => sq(g.res[k])).join("")).join("\n");
-    const s = statFor(mode);
-    const text = `ITEMDLE · ${MODES[mode].label} ${game.won ? game.guesses.length : "X"}/${MAX_TRIES} · streak ${s.streak}\n${objectives().map((k) => SHARE_ICON[k]).join("")}\n${rows}`;
+    const s = curStats();
+    const title = isDaily() ? `ITEMDLE Daily #${day + 1} · ${MODES[mode].label}` : `ITEMDLE · ${MODES[mode].label}`;
+    const text = `${title} ${game.won ? game.guesses.length : "X"}/${MAX_TRIES} · streak ${s.streak}\n${objectives().map((k) => SHARE_ICON[k]).join("")}\n${rows}`;
     if (navigator.share && matchMedia("(pointer: coarse)").matches) navigator.share({ text }).catch(() => {});
     else navigator.clipboard?.writeText(text).then(() => toast("Copied to clipboard"), () => toast("Couldn't copy"));
   }
 
   function replayFeed() {
     feed.replaceChildren();
-    oracle(`<p>${MODES[mode].intro}</p><p class="muted">${MODES[mode].tip} ${MAX_TRIES} attempts. Every puzzle is new — keep your streak alive.</p>`, null, true);
+    const extra = isDaily() ? `Daily #${day + 1}: one puzzle a day, the same for everyone.` : "Every puzzle is new — keep your streak alive.";
+    oracle(`<p>${MODES[mode].intro}</p><p class="muted">${MODES[mode].tip} ${MAX_TRIES} attempts. ${extra}</p>`, null, true);
     game.guesses.forEach((g, i) => { userBubble(g, true); oracle(feedbackFor(g, i + 1), null, true); });
     if (game.done) oracle(endMessage(), endActions(), true);
     feed.querySelectorAll(".msg").forEach((m) => (m.style.animation = "none"));
   }
 
   // ---------- stats modal ----------
-  let statsMode = mode;
+  let statsMode = mode, statsPlay = play;
   function renderStats() {
-    const s = statFor(statsMode);
+    const s = statFor(statKey(statsMode, statsPlay));
     document.querySelectorAll("#stats-seg button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.mode === statsMode)));
+    document.querySelectorAll("#stats-play button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.play === statsPlay)));
     $("#stat-grid").replaceChildren(...[
       [s.played, "Played"],
       [s.played ? `${Math.round((s.wins / s.played) * 100)}%` : "0%", "Win rate"],
@@ -840,16 +917,17 @@
       [s.dist.findIndex((v) => v > 0) + 1 || "–", "Fastest"],
     ].map(([v, l]) => h("div", {}, h("b", {}, String(v)), h("span", {}, l))));
     const max = Math.max(1, ...s.dist);
-    const cur = statsMode === mode && game.won ? game.guesses.length : 0;
+    const cur = statsMode === mode && statsPlay === play && game.won ? game.guesses.length : 0;
     $("#dist").replaceChildren(...s.dist.map((v, i) => h("div", { class: "row" }, String(i + 1),
       h("div", { class: `bar ${cur === i + 1 ? "cur" : ""}`, style: `width:${Math.max(8, (v / max) * 100)}%` }, String(v)))));
   }
-  function openStats() { statsMode = mode; renderStats(); $("#dlg-stats").showModal(); }
+  function openStats() { statsMode = mode; statsPlay = play; renderStats(); $("#dlg-stats").showModal(); }
   document.querySelectorAll("#stats-seg button").forEach((b) => b.addEventListener("click", (e) => { e.preventDefault(); statsMode = b.dataset.mode; renderStats(); }));
+  document.querySelectorAll("#stats-play button").forEach((b) => b.addEventListener("click", (e) => { e.preventDefault(); statsPlay = b.dataset.play; renderStats(); }));
   $("#btn-reset").addEventListener("click", (e) => {
     e.preventDefault();
-    if (!confirm(`Reset all ${MODES[statsMode].label} stats?`)) return;
-    delete stats[statsMode];
+    if (!confirm(`Reset all ${statsPlay === "daily" ? "Daily " : ""}${MODES[statsMode].label} stats?`)) return;
+    delete stats[statKey(statsMode, statsPlay)];
     store.set("rr:stats:v2", stats);
     renderStats();
     renderMiniStats();
@@ -875,7 +953,34 @@
     window.scrollTo({ top: 0 });
   }
 
+  function switchPlay(p) {
+    if (p === play || busy) return;
+    play = p;
+    sfx.mode();
+    store.set("rr:play", p);
+    closeSuggest();
+    q.value = "";
+    loadGame();
+    window.scrollTo({ top: 0 });
+  }
+
+  // "Next daily in 05:12:33" — and when midnight passes, today's dailies roll over.
+  function renderCountdown() {
+    const el = $("#countdown");
+    el.hidden = !isDaily();
+    if (!isDaily()) return;
+    const now = new Date(), next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    const s = Math.max(0, Math.floor((next - now) / 1000));
+    const pad = (n) => String(n).padStart(2, "0");
+    el.textContent = `Next daily in ${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+  }
+  setInterval(() => {
+    renderCountdown();
+    if (isDaily() && todayIndex() !== day && !busy) { loadGame(); toast("A new daily is here!"); }
+  }, 1000);
+
   document.querySelectorAll(".topbar .seg button").forEach((b) => b.addEventListener("click", () => switchMode(b.dataset.mode)));
+  document.querySelectorAll("#play-seg button").forEach((b) => b.addEventListener("click", () => switchPlay(b.dataset.play)));
   $("#btn-help").addEventListener("click", () => { sfx.click(); $("#dlg-help").showModal(); });
   $("#btn-stats").addEventListener("click", () => { sfx.click(); openStats(); });
   const muteBtn = $("#btn-sound");

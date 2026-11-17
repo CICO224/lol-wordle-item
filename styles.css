@@ -734,3 +734,33 @@ button.ad-info:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
   content: ""; position: absolute; top: -6px; right: 26px;
   border: 6px solid transparent; border-top: 0; border-bottom-color: #fff;
 }
+
+/* ---- v16: Daily / Endless ---- */
+.playbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: -6px; }
+.play-seg button { font-size: 13px; padding: 6px 14px; }
+.countdown { font: 500 12px "JetBrains Mono", monospace; color: var(--muted); }
+/* ✓ on a mode tab whose daily is done today */
+.topbar .seg button.done::after { content: " ✓"; color: var(--good); font-weight: 700; }
+.stats-seg + .stats-seg { margin-left: 8px; }
+@media (max-width: 600px) {
+  .stats-seg + .stats-seg { margin-left: 0; }
+  .playbar { justify-content: center; }
+}
+
+/* ---- v17: ITEMDLE title in Friz Quadrata (League's font) ---- */
+/* Friz Quadrata is a commercial font, so it isn't bundled. It's used when installed on the
+   player's computer, or when a licensed copy is saved as assets/fonts/friz-quadrata.otf (or .ttf). Otherwise the title falls back to Marcellus, a free look-alike from Google Fonts. */
+@font-face {
+  font-family: "Friz Quadrata";
+  src: local("Friz Quadrata"), local("Friz Quadrata Std"), local("Friz Quadrata TT"), local("FrizQuadrataStd"),
+       url("assets/fonts/friz-quadrata.otf") format("opentype"),
+       url("assets/fonts/friz-quadrata.ttf") format("truetype");
+  font-display: swap;
+}
+.brand h1 {
+  font-family: "Friz Quadrata", "Friz Quadrata Std", "Marcellus", Georgia, serif;
+  font-weight: 400; font-size: 21px; letter-spacing: .1em;
+  color: #e8cf8f;
+  background: linear-gradient(180deg, #f5e3b1 0%, #c8aa6e 60%, #a07c3c 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}

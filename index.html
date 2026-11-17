@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="assets/logo-64.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Marcellus&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -75,6 +75,15 @@
   </aside>
 
   <main class="layout">
+    <!-- Daily (same puzzle for everyone today) or Endless (random, no repeats per round) -->
+    <div class="playbar">
+      <div class="seg play-seg" id="play-seg" role="tablist" aria-label="Play type">
+        <button role="tab" data-play="daily" aria-selected="true">📅 Daily</button>
+        <button role="tab" data-play="endless" aria-selected="false">∞ Endless</button>
+      </div>
+      <span class="countdown" id="countdown" hidden></span>
+    </div>
+
     <!-- Puzzle board -->
     <section class="card board" aria-label="Puzzle">
       <div class="board-head">
@@ -136,7 +145,8 @@
         <li><span class="badge q">M</span><span><b>Missing</b>: one component is hidden behind the <b>?</b> tile. Name it, then name the finished item.</span></li>
       </ul>
       <p>You get <b>6 attempts</b>. Correct answers lock in, and every puzzle has exactly one answer. Every component shows its gold price and stats. After <b>3 guesses</b>, the hint panel unlocks the finished item's gold and stats.</p>
-      <p class="muted">Each mode keeps its own stats and streak. Giving up counts as a loss.</p>
+      <p><b>📅 Daily</b>: one puzzle per mode each day, the same for everyone. A new one arrives at midnight. <b>∞ Endless</b>: random puzzles as long as you like, and no item repeats until you've seen them all.</p>
+      <p class="muted">Daily and Endless keep separate stats and streaks for each mode. Giving up counts as a loss.</p>
       <button class="btn primary" value="close">Got it</button>
     </form>
   </dialog>
@@ -144,6 +154,10 @@
   <dialog id="dlg-stats" class="modal">
     <form method="dialog">
       <h2>Statistics</h2>
+      <div class="seg stats-seg" id="stats-play" role="tablist" aria-label="Stats for play type">
+        <button type="button" role="tab" data-play="daily">📅 Daily</button>
+        <button type="button" role="tab" data-play="endless">∞ Endless</button>
+      </div>
       <div class="seg stats-seg" id="stats-seg" role="tablist" aria-label="Stats for mode">
         <button type="button" role="tab" data-mode="imposter">Imposter</button>
         <button type="button" role="tab" data-mode="missing">Missing</button>
